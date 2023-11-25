@@ -9,7 +9,7 @@ pretrained/
 build/
 proposal/
 datasets/
-!wetectron/data/datasets
+!data/datasets
 dist/
 cache/
 apex/
@@ -18,6 +18,7 @@ output/
 runs/
 configs/weak_old
 configs/voc_ignore
+log/
 
 # pytorch/python/numpy formats
 *.pth
