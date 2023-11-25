@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 
 from . import cv2_util
 from .checkpoint import DetectronCheckpointer
-from ..structures.image_list import to_image_list
-from ..modeling.roi_heads.mask_head.inference import Masker
-from ..modeling.detector.detectors import build_detection_model
+from structures.image_list import to_image_list
+from modeling.roi_heads.mask_head.inference import Masker
+from modeling.detector.detectors import build_detection_model
 
 from configs import cfg
 import layers as L

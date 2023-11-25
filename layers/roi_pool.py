@@ -2,6 +2,7 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
+from torchvision.ops import roi_pool
 
 
 class ROIPool(nn.Module):
@@ -12,7 +13,7 @@ class ROIPool(nn.Module):
 
     # @amp.float_function
     def forward(self, input, rois):
-        return F.roi_pool(input, rois, self.output_size, self.spatial_scale)
+        return roi_pool(input, rois, self.output_size, self.spatial_scale)
 
     def __repr__(self):
         tmpstr = self.__class__.__name__ + "("
