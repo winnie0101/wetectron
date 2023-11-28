@@ -162,7 +162,7 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, start_iter=0):
     aspect_grouping = [1] if cfg.DATALOADER.ASPECT_RATIO_GROUPING else []
 
     paths_catalog = import_file(
-        "wetectron.config.paths_catalog", cfg.PATHS_CATALOG, True
+        "wetectron.configs.paths_catalog", cfg.PATHS_CATALOG, True
     )
     DatasetCatalog = paths_catalog.DatasetCatalog
     dataset_list = cfg.DATASETS.TRAIN if is_train else cfg.DATASETS.TEST
@@ -181,6 +181,7 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, start_iter=0):
         batch_sampler = make_batch_data_sampler(
             dataset, sampler, aspect_grouping, images_per_gpu, num_iters, start_iter
         )
+        # collator: make sampler list into a batch
         collator = BBoxAugCollator() if not is_train and cfg.TEST.BBOX_AUG.ENABLED else \
             BatchCollator(cfg.DATALOADER.SIZE_DIVISIBILITY)
         num_workers = cfg.DATALOADER.NUM_WORKERS

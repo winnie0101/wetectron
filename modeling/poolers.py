@@ -3,10 +3,8 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from layers.roi_align import ROIAlign
-from layers.roi_pool import ROIPool
-# from torchvision.ops.roi_pool import RoIPool
-# from torchvision.ops import RoIAlign
+from torchvision.ops.roi_pool import RoIPool
+from torchvision.ops import RoIAlign
 from configs import cfg
 
 from .utils import cat
@@ -68,11 +66,11 @@ class Pooler(nn.Module):
         for scale in scales:
             if cfg.MODEL.ROI_BOX_HEAD.POOLER_METHOD == "ROIPool":
                 poolers.append(
-                    ROIPool(output_size, spatial_scale=scale)
+                    RoIPool(output_size, spatial_scale=scale)
                 )
             elif cfg.MODEL.ROI_BOX_HEAD.POOLER_METHOD == "ROIAlign":
                 poolers.append(
-                    ROIAlign(output_size, spatial_scale=scale, sampling_ratio=sampling_ratio)
+                    RoIAlign(output_size, spatial_scale=scale, sampling_ratio=sampling_ratio)
                 )
             else:
                 raise ValueError('please use valid pooler function')

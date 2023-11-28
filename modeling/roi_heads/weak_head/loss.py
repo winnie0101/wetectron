@@ -5,7 +5,7 @@
 import torch
 from torch.nn import functional as F
 
-from layers import smooth_l1_loss
+from layers.smooth_l1_loss import smooth_l1_loss
 from modeling import registry
 from modeling.utils import cat
 from configs import cfg
@@ -275,11 +275,11 @@ class RoIRegLossComputation(object):
                     map_inds = 4 * labels_pos[:, None] + torch.tensor([0, 1, 2, 3], device=device)
 
                 box_regression = ref_bbox_preds[i][idx]
-                reg_loss = lmda * torch.sum(smooth_l1_loss(
+                l1_loss = smooth_l1_loss(
                     box_regression[sampled_pos_inds_subset[:, None], map_inds],
                     regression_targets[sampled_pos_inds_subset],
                     beta=1, reduction=False) * loss_weights[sampled_pos_inds_subset, None]
-                )
+                reg_loss = lmda * torch.sum(l1_loss)
                 reg_loss /= pseudo_labels.numel()
                 return_loss_dict['loss_ref_reg%d'%i] += reg_loss 
                 

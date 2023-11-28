@@ -33,10 +33,12 @@ class DistributedSampler(Sampler):
             rank = dist.get_rank()
         self.dataset = dataset
         self.num_replicas = num_replicas
+        # rank: is the rank of the current process
         self.rank = rank
         self.epoch = 0
         self.num_samples = int(math.ceil(len(self.dataset) * 1.0 / self.num_replicas))
         self.total_size = self.num_samples * self.num_replicas
+        # shuffle: whether to shuffle the indices or not
         self.shuffle = shuffle
 
     def __iter__(self):

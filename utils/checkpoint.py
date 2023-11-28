@@ -151,7 +151,7 @@ class DetectronCheckpointer(Checkpointer):
         # catalog lookup
         if f.startswith("catalog://"):
             paths_catalog = import_file(
-                "wetectron.config.paths_catalog", self.cfg.PATHS_CATALOG, True
+                "wetectron.configs.paths_catalog", self.cfg.PATHS_CATALOG, True
             )
             catalog_f = paths_catalog.ModelCatalog.get(f[len("catalog://") :])
             self.logger.info("{} points to {}".format(f, catalog_f))

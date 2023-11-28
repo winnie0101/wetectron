@@ -184,7 +184,6 @@ def vis_results(
         # prediction in descending order of score
         scores = prediction.get_field("scores")
         _, idx = scores.sort(0, descending=True)
-        print("idx", idx)
         prediction = prediction[idx]
         
         result = image.copy()
