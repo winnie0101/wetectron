@@ -3,6 +3,7 @@ __pycache__
 _ext
 *.pyc
 *.so
+log/
 maskrcnn_benchmark.egg-info/
 wetectron.egg-info/
 pretrained/
@@ -18,7 +19,6 @@ output/
 runs/
 configs/weak_old
 configs/voc_ignore
-log/
 
 # pytorch/python/numpy formats
 *.pth
