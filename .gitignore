@@ -1,24 +1,9 @@
 # compilation and distribution
 __pycache__
-_ext
-*.pyc
-*.so
 log/
-maskrcnn_benchmark.egg-info/
-wetectron.egg-info/
 pretrained/
-build/
 proposal/
 datasets/
-!data/datasets
-dist/
-cache/
-apex/
-cocoapi/
-output/
-runs/
-configs/weak_old
-configs/voc_ignore
 
 # pytorch/python/numpy formats
 *.pth
