@@ -1,6 +1,7 @@
 # compilation and distribution
 __pycache__
 log/
+output/
 pretrained/
 proposal/
 datasets/
