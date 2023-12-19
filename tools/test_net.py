@@ -3,23 +3,22 @@
 # Nvidia Source Code License-NC
 # --------------------------------------------------------
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+import os
+import sys
+o_path = os.getcwd()
+sys.path.append(o_path)
 
 # Set up custom environment before nearly anything else is imported
 # NOTE: this should be the first import (no not reorder)
-# from utils.env import setup_environment  # noqa F401 isort:skip
+from utils.env import setup_environment  # noqa F401 isort:skip
 
-import os
-import sys
 import torch
 import argparse
-
-o_path = os.getcwd()
-sys.path.append(o_path)
 
 from config import cfg
 from data import make_data_loader
 from tools.engine.inference import inference
-from wetectron.utils.checkpoint import DetectronCheckpointer
+from utils.checkpoint import DetectronCheckpointer
 from utils.collect_env import collect_env_info
 from utils.distributed import synchronize, get_rank
 from utils.logger import setup_logger
