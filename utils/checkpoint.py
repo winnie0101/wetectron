@@ -87,6 +87,7 @@ class Checkpointer(object):
             self.logger.info("Loading model_cdb from {}".format(f))
             temp_ckp = checkpoint.pop("model_cdb")
             temp_dict = {k.partition('module.')[2]: v for k,v in temp_ckp.items()}
+            print(self.model_cdb)
             self.model_cdb.load_state_dict(temp_dict)
         if "optimizer_cdb" in checkpoint and self.optimizer_cdb:
             self.logger.info("Loading optimizer_cdb from {}".format(f))

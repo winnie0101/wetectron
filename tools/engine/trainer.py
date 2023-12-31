@@ -7,7 +7,6 @@ import datetime
 import logging
 import time
 import torch
-from apex import amp
 from utils.distributed import get_world_size
 
 
@@ -20,6 +19,7 @@ def reduce_loss_dict(loss_dict):
     world_size = get_world_size()
     if world_size < 2:
         return loss_dict
+    
     with torch.no_grad():
         loss_names = []
         all_losses = []
@@ -39,11 +39,13 @@ def update_momentum(optimizer, cur_lr, new_lr, logger, SCALE_MOMENTUM_THRESHOLD 
     """Update momentum as Sutskever et. al. and implementations in some other frameworks."""
     import numpy as np
     ratio = np.max((new_lr / np.max((cur_lr, eps)), cur_lr / np.max((new_lr, eps))))
+
     if ratio > SCALE_MOMENTUM_THRESHOLD:
         logger.info("update_momentum")
         param_keys = []
         for ind, param_group in enumerate(optimizer.param_groups):
             param_keys += param_group['params']
+
         correction = new_lr / cur_lr
         for p_key in param_keys:
             param_state = optimizer.state[p_key]
@@ -66,6 +68,7 @@ def do_train(
     max_iter = len(data_loader)
     start_iter = arguments["iteration"]
     iter_size = arguments["iter_size"]
+
     model.train()
     start_training_time = time.time()
     end = time.time()
@@ -97,16 +100,13 @@ def do_train(
         loss_dict_reduced = reduce_loss_dict(loss_dict)
         losses_reduced = sum(loss for loss in loss_dict_reduced.values())
         meters.update(loss=losses_reduced, **loss_dict_reduced)
+
+        losses.backward()
         
         # accuracy
         metrics_reduced = reduce_loss_dict(metrics)
         meters.update(**metrics_reduced)
 
-        
-        # Note: If mixed precision is not used, this ends up doing nothing
-        # Otherwise apply loss scaling for mixed-precision recipe
-        with amp.scale_loss(losses, optimizer) as scaled_losses:
-            scaled_losses.backward()
 
         if iteration % iter_size == 0:
             optimizer.step()
@@ -170,8 +170,10 @@ def do_train_cdb(
     logger.info("Start training")
     max_iter = len(data_loader)
     start_iter = arguments["iteration"]
+
     model.train()
     model_cdb.train()
+
     start_training_time = time.time()
     end = time.time()
 
@@ -181,8 +183,10 @@ def do_train_cdb(
             continue
         data_time = time.time() - end
         iteration = iteration + 1
+        print("iteration: ", iteration)
         arguments["iteration"] = iteration
 
+        # update learning rate
         cur_lr = optimizer.param_groups[0]["lr"]
         scheduler.step()
         scheduler_cdb.step()
@@ -191,26 +195,27 @@ def do_train_cdb(
             update_momentum(optimizer, cur_lr, new_lr, logger)
             update_momentum(optimizer_cdb, cur_lr, new_lr, logger)
         
+        # move to gpu
         images = images.to(device)
         targets = [target.to(device) for target in targets]
         rois = [r.to(device) if r is not None else None for r in rois]
 
+        # forward pass and compute loss
         loss_dict, metrics = model(images, targets, rois, model_cdb)
         losses = sum(loss for loss in loss_dict.values())
         # reduce losses over all GPUs for logging purposes
         loss_dict_reduced = reduce_loss_dict(loss_dict)
         losses_reduced = sum(loss for loss in loss_dict_reduced.values())
-        meters.update(loss=losses_reduced, **loss_dict_reduced)
+        meters.update(loss=losses_reduced, iteration=iteration, **loss_dict_reduced)
         
         # accuracy
         metrics_reduced = reduce_loss_dict(metrics)
-        meters.update(**metrics_reduced)
+        meters.update(iteration=iteration, **metrics_reduced)
+
+        # backward pass
         optimizer.zero_grad()
         optimizer_cdb.zero_grad()
-        # Note: If mixed precision is not used, this ends up doing nothing
-        # Otherwise apply loss scaling for mixed-precision recipe
-        with amp.scale_loss(losses, optimizer) as scaled_losses:
-            scaled_losses.backward()
+        losses.backward()
         optimizer.step()
 
         # concrete db
@@ -218,13 +223,12 @@ def do_train_cdb(
         optimizer_cdb.zero_grad()
         loss_dict, metrics = model(images, targets, rois, model_cdb)
         losses_cdb = - float(cfg.DB.WEIGHT) * sum(loss for loss in loss_dict.values())
-        with amp.scale_loss(losses_cdb, optimizer_cdb) as scaled_losses_cdb:
-            scaled_losses_cdb.backward()
+        losses_cdb.backward()
         optimizer_cdb.step()
 
         batch_time = time.time() - end
         end = time.time()
-        meters.update(time=batch_time, data=data_time)
+        meters.update(time=batch_time, iteration=iteration, data=data_time)
 
         eta_seconds = meters.time.global_avg * (max_iter - iteration)
         eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))

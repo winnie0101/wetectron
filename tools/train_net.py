@@ -3,50 +3,41 @@
 # Nvidia Source Code License-NC
 # --------------------------------------------------------
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+import os
+import sys
+o_path = os.getcwd()
+sys.path.append(o_path)
 
 # Set up custom environment before nearly anything else is imported
 # NOTE: this should be the first import (no not reorder)
 from utils.env import setup_environment  # noqa F401 isort:skip
 
 import argparse
-import os
-import random
 import warnings
-import numpy as np
 import torch
 from config import cfg
-from wetectron.data import make_data_loader
-from wetectron.solver import make_lr_scheduler, make_lr_cdb_scheduler
-from wetectron.solver import make_optimizer, make_cdb_optimizer
-from wetectron.engine.inference import inference
-from wetectron.engine.trainer import do_train, do_train_cdb
-from models.detector import build_detection_model
+from data.build import make_data_loader
+from solver import make_lr_scheduler, make_lr_cdb_scheduler
+from solver import make_optimizer, make_cdb_optimizer
+from tools.engine.inference import inference
+from tools.engine.trainer import do_train, do_train_cdb
+from models.generalized_rcnn import GeneralizedRCNN
 from utils.checkpoint import DetectronCheckpointer
 from utils.collect_env import collect_env_info
 from utils.distributed import synchronize, get_rank
-from utils.imports import import_file
 from utils.logger import setup_logger
 from utils.miscellaneous import mkdir, save_config, seed_all_rng
 from utils.metric_logger import (MetricLogger, TensorboardLogger)
 from models.cdb import ConvConcreteDB
 
-try:
-    from apex import amp
-except ImportError:
-    raise ImportError('Use APEX for multi-precision via apex.amp')
 
 def train(cfg, local_rank, distributed, use_tensorboard=False):
-    model = build_detection_model(cfg)
+    model = GeneralizedRCNN(cfg)
     device = torch.device(cfg.MODEL.DEVICE)
     model.to(device)
 
     optimizer = make_optimizer(cfg, model)
     scheduler = make_lr_scheduler(cfg, optimizer)
-
-    # Initialize mixed-precision training
-    use_mixed_precision = cfg.DTYPE == "float16"
-    amp_opt_level = 'O1' if use_mixed_precision else 'O0'
-    model, optimizer = amp.initialize(model, optimizer, opt_level=amp_opt_level)
 
     if distributed:
         model = torch.nn.parallel.DistributedDataParallel(
@@ -59,9 +50,7 @@ def train(cfg, local_rank, distributed, use_tensorboard=False):
     output_dir = cfg.OUTPUT_DIR
     save_to_disk = get_rank() == 0
     checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
-    checkpointer = DetectronCheckpointer(
-        cfg, model, optimizer, scheduler, output_dir, save_to_disk
-    )
+    checkpointer = DetectronCheckpointer(cfg, model, optimizer, scheduler, output_dir, save_to_disk)
     extra_checkpoint_data = checkpointer.load(cfg.MODEL.WEIGHT)
     arguments.update(extra_checkpoint_data)
 
@@ -96,22 +85,19 @@ def train(cfg, local_rank, distributed, use_tensorboard=False):
 
 
 def train_cdb(cfg, local_rank, distributed, use_tensorboard=False):
-    model = build_detection_model(cfg)
     device = torch.device(cfg.MODEL.DEVICE)
+
+    model = GeneralizedRCNN(cfg)
     model.to(device)
+
     model_cdb = ConvConcreteDB(cfg, model.backbone.out_channels)
     model_cdb.to(device)
 
     optimizer = make_optimizer(cfg, model)
     scheduler = make_lr_scheduler(cfg, optimizer)
+
     optimizer_cdb = make_cdb_optimizer(cfg, model_cdb)
     scheduler_cdb = make_lr_cdb_scheduler(cfg, optimizer_cdb)
-
-    # Initialize mixed-precision training
-    use_mixed_precision = cfg.DTYPE == "float16"
-    amp_opt_level = 'O1' if use_mixed_precision else 'O0'
-    model, optimizer = amp.initialize(model, optimizer, opt_level=amp_opt_level)
-    model_cdb, optimizer_cdb, = amp.initialize(model_cdb, optimizer_cdb, opt_level=amp_opt_level)
 
     if distributed:
         model = torch.nn.parallel.DistributedDataParallel(
@@ -129,6 +115,7 @@ def train_cdb(cfg, local_rank, distributed, use_tensorboard=False):
     output_dir = cfg.OUTPUT_DIR
     save_to_disk = get_rank() == 0
     checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
+
     # TODO: check whether the *_cdb is properly loaded for inference when using 1 GPU
     checkpointer = DetectronCheckpointer(
         cfg, model, optimizer, scheduler, output_dir, save_to_disk, model_cdb=model_cdb
@@ -203,7 +190,7 @@ def main():
         help="path to config file",
         type=str,
     )
-    parser.add_argument("--local_rank", type=int, default=0)
+    parser.add_argument("--local-rank", type=int, default=0)
     parser.add_argument(
         "--skip-test",
         dest="skip_test",

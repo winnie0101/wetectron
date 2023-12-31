@@ -60,11 +60,11 @@ class DatasetCatalog(object):
         },
         "voc_2007_train": {
             "data_dir": "voc/VOC2007",
-            "split": "train"
+            "split": "train3"
         },
         "voc_2007_val": {
             "data_dir": "voc/VOC2007",
-            "split": "val"
+            "split": "val3"
         },
         "voc_2007_trainval": {
             "data_dir": "voc/VOC2007",

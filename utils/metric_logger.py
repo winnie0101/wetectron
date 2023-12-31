@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 import torch
 
-from ...utils.distributed import is_main_process
+from .distributed import is_main_process
 
 
 class SmoothedValue(object):
@@ -100,12 +100,13 @@ class TensorboardLogger(MetricLogger):
         else:
             return None
 
-    def update(self, ** kwargs):
+    def update(self, iteration=None, ** kwargs):
         super(TensorboardLogger, self).update(**kwargs)
+        self.iteration = iteration
         if self.writer:
             for k, v in kwargs.items():
                 if isinstance(v, torch.Tensor):
                     v = v.item()
                 assert isinstance(v, (float, int))
+                print(k, v, self.iteration)
                 self.writer.add_scalar(k, v, self.iteration)
-            self.iteration += 1
