@@ -134,14 +134,15 @@ class CeyMoDataset(torch.utils.data.Dataset):
                 )
 
                 boxes.append(bndbox)
+                difficult_boxes.append(difficult)
             elif name != "jb" and len(boxes)==0: # no Junction Box
-                gt_classes.append([0])
+                gt_classes.append(0)
                 box=[0, 0, 0, 0]
                 bndbox = tuple(
                     map(lambda x: x - TO_REMOVE, list(map(int, box)))
                 )
                 boxes.append(bndbox)
-            difficult_boxes.append(difficult)
+                difficult_boxes.append(difficult)
 
         size = target.find("size")
         im_info = tuple(map(int, (size.find("height").text, size.find("width").text)))

@@ -27,6 +27,8 @@ VOC_CATEGORIES = ["__background",
     "aeroplane","bicycle","bird","boat","bottle","bus","car","cat","chair", "cow","diningtable","dog",
     "horse","motorbike","person","pottedplant","sheep","sofa","train","tvmonitor"]
 
+CEYMO_CATEGORIES = ["no jb", "jb"]
+
 def compute_colors_for_labels(labels):
     """ Simple function that adds fixed colors depending on the class """
     palette = torch.tensor([2 ** 25 - 1, 2 ** 15 - 1, 2 ** 21 - 1])
@@ -196,6 +198,8 @@ def vis_results(
                 CATEGORIES = COCO_CATEGORIES
             elif 'voc' in data_path:
                 CATEGORIES = VOC_CATEGORIES
+            elif 'ceymo' in data_path:
+                CATEGORIES = CEYMO_CATEGORIES
             else:
                 raise ValueError
             result = overlay_class_names(result, prediction, CATEGORIES)

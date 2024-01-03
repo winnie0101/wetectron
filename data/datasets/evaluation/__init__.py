@@ -1,6 +1,7 @@
 from data import datasets
 from .coco import coco_evaluation
 from .voc import voc_evaluation
+from .ceymo import ceymo_evaluation
 
 
 def evaluate(dataset, predictions, output_folder, task='det', **kwargs):
@@ -19,7 +20,7 @@ def evaluate(dataset, predictions, output_folder, task='det', **kwargs):
     )
     if isinstance(dataset, datasets.CeyMoDataset):
         args['task'] = task
-        return voc_evaluation(**args)
+        return ceymo_evaluation(**args)
     elif isinstance(dataset, datasets.COCODataset) and "voc_2012" not in dataset.ann_file:
         return coco_evaluation(**args)
     elif isinstance(dataset, datasets.PascalVOCDataset) or "voc_2012" in dataset.ann_file:
