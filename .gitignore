@@ -18,6 +18,7 @@ runs/
 configs/weak_old
 configs/voc_ignore
 log/
+result_on_server/
 
 # pytorch/python/numpy formats
 *.pth
@@ -42,5 +43,3 @@ log/
 
 # MacOS
 .DS_Store
-
-.result_on_server/
