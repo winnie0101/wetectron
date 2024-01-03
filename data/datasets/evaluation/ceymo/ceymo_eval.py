@@ -30,9 +30,8 @@ def do_ceymo_evaluation(dataset, predictions, output_folder, logger):
     
     result_str = "mAP: {:.4f}\n".format(result["map"])
     for i, ap in enumerate(result["ap"]):
-        # CeyMo has 2 classes
-        # if i == 0:  # skip background
-        #     continue
+        if i == 0:  # skip background
+            continue
         result_str += "{:<16}: {:.4f}\n".format(
             dataset.map_class_id_to_class_name(i), ap
         )

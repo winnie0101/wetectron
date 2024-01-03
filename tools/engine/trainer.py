@@ -203,7 +203,6 @@ def do_train_cdb(
 
         # forward pass and compute loss
         loss_dict, metrics = model(images, targets, rois, model_cdb)
-        # CeyMo: do not use the loss when the class is 'no junction box'
 
         losses = sum(loss for loss in loss_dict.values())
         # reduce losses over all GPUs for logging purposes

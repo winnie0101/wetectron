@@ -82,8 +82,6 @@ def calc_detection_voc_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
         gt_bbox = gt_boxlist.bbox.numpy()
         gt_label = gt_boxlist.get_field("labels").numpy()
         gt_difficult = gt_boxlist.get_field("difficult").numpy()
-        print("pred_label:", pred_label)
-        print("gt_label:", gt_label)
 
         for l in np.unique(np.concatenate((pred_label, gt_label)).astype(int)):
             pred_mask_l = pred_label == l

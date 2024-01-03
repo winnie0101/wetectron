@@ -13,6 +13,7 @@ from .coco import unique_boxes
 class CeyMoDataset(torch.utils.data.Dataset):
 
     CLASSES = (
+        "__background__ ",
         "no jb", # no Junction Box
         "jb" # Junction Box
     )
@@ -136,7 +137,7 @@ class CeyMoDataset(torch.utils.data.Dataset):
                 boxes.append(bndbox)
                 difficult_boxes.append(difficult)
             elif name != "jb" and len(boxes)==0: # no Junction Box
-                gt_classes.append(0)
+                gt_classes.append(1)
                 box=[0, 0, 0, 0]
                 bndbox = tuple(
                     map(lambda x: x - TO_REMOVE, list(map(int, box)))
