@@ -23,12 +23,14 @@ def do_voc_evaluation(dataset, predictions, output_folder, logger):
 
         gt_boxlist = dataset.get_groundtruth(image_id)
         gt_boxlists.append(gt_boxlist)
+
     result = eval_detection_voc(
         pred_boxlists=pred_boxlists,
         gt_boxlists=gt_boxlists,
         iou_thresh=0.5,
         use_07_metric=True,
     )
+    
     result_str = "mAP: {:.4f}\n".format(result["map"])
     for i, ap in enumerate(result["ap"]):
         if i == 0:  # skip background

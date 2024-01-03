@@ -91,6 +91,14 @@ class DatasetCatalog(object):
             "split": "test"
             # PASCAL VOC2012 doesn't made the test annotations available, so there's no json annotation
         },
+        "ceymo_train": {
+            "data_dir": "ceymo/Ceymo/train",
+            "split": "train_list2"
+        },
+        "ceymo_test": {
+            "data_dir": "ceymo/Ceymo/test",
+            "split": "test_list2"
+        },
         "cityscapes_fine_instanceonly_seg_train_cocostyle": {
             "img_dir": "cityscapes/images",
             "ann_file": "cityscapes/annotations/instancesonly_filtered_gtFine_train.json"
@@ -127,6 +135,17 @@ class DatasetCatalog(object):
             )
             return dict(
                 factory="PascalVOCDataset",
+                args=args,
+            )
+        elif "ceymo" in name:
+            data_dir = DatasetCatalog.DATA_DIR
+            attrs = DatasetCatalog.DATASETS[name]
+            args = dict(
+                data_dir=os.path.join(data_dir, attrs["data_dir"]),
+                split=attrs["split"],
+            )
+            return dict(
+                factory="CeyMoDataset",
                 args=args,
             )
         elif "lvis" in name:

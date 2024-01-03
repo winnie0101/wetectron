@@ -115,6 +115,7 @@ def train_cdb(cfg, local_rank, distributed, use_tensorboard=False):
     output_dir = cfg.OUTPUT_DIR
     save_to_disk = get_rank() == 0
     checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
+    print("checkpoint_period: ", checkpoint_period)
 
     # TODO: check whether the *_cdb is properly loaded for inference when using 1 GPU
     checkpointer = DetectronCheckpointer(

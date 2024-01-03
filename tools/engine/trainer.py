@@ -183,7 +183,7 @@ def do_train_cdb(
             continue
         data_time = time.time() - end
         iteration = iteration + 1
-        print("iteration: ", iteration)
+        print("\niteration: ", iteration)   
         arguments["iteration"] = iteration
 
         # update learning rate
@@ -197,11 +197,14 @@ def do_train_cdb(
         
         # move to gpu
         images = images.to(device)
+        # print("targets: ", targets)
         targets = [target.to(device) for target in targets]
         rois = [r.to(device) if r is not None else None for r in rois]
 
         # forward pass and compute loss
         loss_dict, metrics = model(images, targets, rois, model_cdb)
+        # CeyMo: do not use the loss when the class is 'no junction box'
+
         losses = sum(loss for loss in loss_dict.values())
         # reduce losses over all GPUs for logging purposes
         loss_dict_reduced = reduce_loss_dict(loss_dict)
