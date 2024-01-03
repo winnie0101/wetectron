@@ -13,7 +13,7 @@ from .coco import unique_boxes
 class CeyMoDataset(torch.utils.data.Dataset):
 
     CLASSES = (
-        "__background__ ",
+        # "__background__ ",
         "no jb", # no Junction Box
         "jb" # Junction Box
     )
@@ -111,7 +111,6 @@ class CeyMoDataset(torch.utils.data.Dataset):
         boxes = []
         gt_classes = []
         difficult_boxes = []
-        TO_REMOVE = 1
 
         for obj in target.iter("object"):
             difficult = int(obj.find("difficult").text) == 1
@@ -130,18 +129,14 @@ class CeyMoDataset(torch.utils.data.Dataset):
                     bb.find("xmax").text,
                     bb.find("ymax").text,
                 ]
-                bndbox = tuple(
-                    map(lambda x: x - TO_REMOVE, list(map(int, box)))
-                )
+                bndbox = tuple(map(int, box))
 
                 boxes.append(bndbox)
                 difficult_boxes.append(difficult)
             elif name != "jb" and len(boxes)==0: # no Junction Box
-                gt_classes.append(1)
+                gt_classes.append(0)
                 box=[0, 0, 0, 0]
-                bndbox = tuple(
-                    map(lambda x: x - TO_REMOVE, list(map(int, box)))
-                )
+                bndbox = tuple(map(int, box))
                 boxes.append(bndbox)
                 difficult_boxes.append(difficult)
 

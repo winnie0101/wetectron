@@ -1,0 +1,867 @@
+2024-01-03 13:41:15,351 wetectron INFO: Using 4 GPUs
+2024-01-03 13:41:15,351 wetectron INFO: Namespace(config_file='config/ceymo/V_16_ceymo.yaml', local_rank=0, skip_test=False, opts=['OUTPUT_DIR', 'output'], use_tensorboard=True, distributed=True)
+2024-01-03 13:41:15,351 wetectron INFO: Collecting env info (might take some time)
+2024-01-03 13:41:18,087 wetectron INFO: 
+PyTorch version: 2.1.2
+Is debug build: False
+CUDA used to build PyTorch: 11.8
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 18.04.6 LTS (x86_64)
+GCC version: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+Clang version: Could not collect
+CMake version: Could not collect
+Libc version: glibc-2.27
+
+Python version: 3.9.18 (main, Sep 11 2023, 13:41:44)  [GCC 11.2.0] (64-bit runtime)
+Python platform: Linux-5.4.0-125-generic-x86_64-with-glibc2.27
+Is CUDA available: True
+CUDA runtime version: 10.2.89
+CUDA_MODULE_LOADING set to: LAZY
+GPU models and configuration: 
+GPU 0: Tesla V100-SXM2-32GB-LS
+GPU 1: Tesla V100-SXM2-32GB-LS
+GPU 2: Tesla V100-SXM2-32GB-LS
+GPU 3: Tesla V100-SXM2-32GB-LS
+
+Nvidia driver version: 470.141.03
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.5.0
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+Is XNNPACK available: True
+
+CPU:
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              80
+On-line CPU(s) list: 0-79
+Thread(s) per core:  2
+Core(s) per socket:  20
+Socket(s):           2
+NUMA node(s):        2
+Vendor ID:           GenuineIntel
+CPU family:          6
+Model:               79
+Model name:          Intel(R) Xeon(R) CPU E5-2698 v4 @ 2.20GHz
+Stepping:            1
+CPU MHz:             2699.414
+CPU max MHz:         3600.0000
+CPU min MHz:         1200.0000
+BogoMIPS:            4389.73
+Virtualization:      VT-x
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            256K
+L3 cache:            51200K
+NUMA node0 CPU(s):   0-19,40-59
+NUMA node1 CPU(s):   20-39,60-79
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single pti intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap intel_pt xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts md_clear flush_l1d
+
+Versions of relevant libraries:
+[pip3] numpy==1.26.2
+[pip3] torch==2.1.2
+[pip3] torchaudio==2.1.2
+[pip3] torchvision==0.16.2
+[pip3] triton==2.1.0
+[conda] blas                      1.0                         mkl  
+[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch
+[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch
+[conda] mkl                       2023.1.0         h213fc3f_46344  
+[conda] mkl-service               2.4.0            py39h5eee18b_1  
+[conda] mkl_fft                   1.3.8            py39h5eee18b_0  
+[conda] mkl_random                1.2.4            py39hdb19cb5_0  
+[conda] numpy                     1.26.2           py39h5f9d8c6_0  
+[conda] numpy-base                1.26.2           py39hb5e798b_0  
+[conda] pytorch                   2.1.2           py3.9_cuda11.8_cudnn8.7.0_0    pytorch
+[conda] pytorch-cuda              11.8                 h7e8668a_5    pytorch
+[conda] pytorch-mutex             1.0                        cuda    pytorch
+[conda] torchaudio                2.1.2                py39_cu118    pytorch
+[conda] torchtriton               2.1.0                      py39    pytorch
+[conda] torchvision               0.16.2               py39_cu118    pytorch
+        Pillow (10.0.1)
+2024-01-03 13:41:18,087 wetectron INFO: Loaded configuration file config/ceymo/V_16_ceymo.yaml
+2024-01-03 13:41:18,088 wetectron INFO: 
+MODEL:
+  META_ARCHITECTURE: "GeneralizedRCNN"
+  WEIGHT: "catalog://VGGImageNetPretrained/JCJOHNS/VGG-16" 
+  BACKBONE:
+    CONV_BODY: "VGG16-OICR"
+  WSOD_ON: True
+  FASTER_RCNN: False
+  ROI_HEADS:
+    SCORE_THRESH: 0.0
+    NMS: 0.3
+  ROI_BOX_HEAD:
+    NUM_CLASSES: 3
+    POOLER_METHOD: "ROIPool"
+    POOLER_RESOLUTION: 7
+    POOLER_SCALES: (0.125,)
+    FEATURE_EXTRACTOR: "VGG16.roi_head"
+  ROI_WEAK_HEAD:
+    PREDICTOR: "MISTPredictor"
+    LOSS: "RoIRegLoss"
+    OICR_P: 0.15
+    REGRESS_ON: True
+DB:
+  METHOD: 'concrete'
+DATASETS:
+  TRAIN: ("ceymo_train",)
+  TEST: ("ceymo_test",)
+PROPOSAL_FILES:
+  TRAIN: ('proposal/SS-ceymo_train-boxes.pkl',)
+  TEST:  ('proposal/SS-ceymo_test-boxes.pkl',)
+DATALOADER:
+  SIZE_DIVISIBILITY: 32
+INPUT:
+  MIN_SIZE_TRAIN: (480, 576, 688, 864, 1000, 1200) 
+  MAX_SIZE_TRAIN: 2000
+  MIN_SIZE_TEST: 800
+  MAX_SIZE_TEST: 2000
+SOLVER:
+  IMS_PER_BATCH: 8 #8
+  BASE_LR: 0.01
+  WEIGHT_DECAY: 0.0001
+  WARMUP_ITERS: 200 #200
+  STEPS: (20000, 26700) #(20000, 26700)
+  MAX_ITER: 2000 # 30000
+  CHECKPOINT_PERIOD: 1000 #1000
+SOLVER_CDB:
+  BASE_LR: 0.0001
+  GAMMA: 3.0
+  WEIGHT_DECAY: 0.0001
+  STEPS: (20000, 26700) #(20000, 26700)
+TEST:
+  BBOX_AUG:
+    ENABLED: True
+    HEUR: "AVG"
+    H_FLIP: True
+    SCALES: (480, 576, 688, 864, 1000, 1200) 
+    MAX_SIZE: 2000
+    SCALE_H_FLIP: True
+SEED: 1234
+2024-01-03 13:41:18,088 wetectron INFO: Running with config:
+AMP_VERBOSE: False
+DATALOADER:
+  ASPECT_RATIO_GROUPING: True
+  NUM_WORKERS: 4
+  SIZE_DIVISIBILITY: 32
+DATASETS:
+  TEST: ('ceymo_test',)
+  TRAIN: ('ceymo_train',)
+DB:
+  GSM_THRES: 0.01
+  IS_HARD: True
+  LR: 0.01
+  METHOD: concrete
+  OPTIMIZER: sgd
+  SIZE: 3
+  TAU: 0.3
+  WEIGHT: 0.01
+DTYPE: float32
+INPUT:
+  BRIGHTNESS: 0.0
+  CONTRAST: 0.0
+  HUE: 0.0
+  MAX_SIZE_TEST: 2000
+  MAX_SIZE_TRAIN: 2000
+  MIN_SIZE_TEST: 800
+  MIN_SIZE_TRAIN: (480, 576, 688, 864, 1000, 1200)
+  PCA: True
+  PIXEL_MEAN: [102.9801, 115.9465, 122.7717]
+  PIXEL_STD: [1.0, 1.0, 1.0]
+  SATURATION: 0.0
+  TO_BGR255: True
+  VERTICAL_FLIP_PROB_TRAIN: 0.0
+MODEL:
+  BACKBONE:
+    CONV_BODY: VGG16-OICR
+    FREEZE_CONV_BODY_AT: 2
+  CLS_AGNOSTIC_BBOX_REG: False
+  DEVICE: cuda
+  FASTER_RCNN: False
+  FBNET:
+    ARCH: default
+    ARCH_DEF: 
+    BN_TYPE: bn
+    DET_HEAD_BLOCKS: []
+    DET_HEAD_LAST_SCALE: 1.0
+    DET_HEAD_STRIDE: 0
+    DW_CONV_SKIP_BN: True
+    DW_CONV_SKIP_RELU: True
+    KPTS_HEAD_BLOCKS: []
+    KPTS_HEAD_LAST_SCALE: 0.0
+    KPTS_HEAD_STRIDE: 0
+    MASK_HEAD_BLOCKS: []
+    MASK_HEAD_LAST_SCALE: 0.0
+    MASK_HEAD_STRIDE: 0
+    RPN_BN_TYPE: 
+    RPN_HEAD_BLOCKS: 0
+    SCALE_FACTOR: 1.0
+    WIDTH_DIVISOR: 1
+  FPN:
+    USE_GN: False
+    USE_RELU: False
+  GROUP_NORM:
+    DIM_PER_GP: -1
+    EPSILON: 1e-05
+    NUM_GROUPS: 32
+  KEYPOINT_ON: False
+  MASK_ON: False
+  META_ARCHITECTURE: GeneralizedRCNN
+  RESNETS:
+    BACKBONE_OUT_CHANNELS: 1024
+    DEFORMABLE_GROUPS: 1
+    NUM_GROUPS: 1
+    RES2_OUT_CHANNELS: 256
+    RES5_DILATION: 1
+    STAGE_WITH_DCN: (False, False, False, False)
+    STEM_FUNC: StemWithFixedBatchNorm
+    STEM_OUT_CHANNELS: 64
+    STRIDE_IN_1X1: True
+    TRANS_FUNC: BottleneckWithFixedBatchNorm
+    WIDTH_PER_GROUP: 64
+    WITH_MODULATED_DCN: False
+  RETINANET:
+    ANCHOR_SIZES: (32, 64, 128, 256, 512)
+    ANCHOR_STRIDES: (8, 16, 32, 64, 128)
+    ASPECT_RATIOS: (0.5, 1.0, 2.0)
+    BBOX_REG_BETA: 0.11
+    BBOX_REG_WEIGHT: 4.0
+    BG_IOU_THRESHOLD: 0.4
+    FG_IOU_THRESHOLD: 0.5
+    INFERENCE_TH: 0.05
+    LOSS_ALPHA: 0.25
+    LOSS_GAMMA: 2.0
+    NMS_TH: 0.4
+    NUM_CLASSES: 81
+    NUM_CONVS: 4
+    OCTAVE: 2.0
+    PRE_NMS_TOP_N: 1000
+    PRIOR_PROB: 0.01
+    SCALES_PER_OCTAVE: 3
+    STRADDLE_THRESH: 0
+    USE_C5: True
+  RETINANET_ON: False
+  ROI_BOX_HEAD:
+    CONV_HEAD_DIM: 256
+    DILATION: 1
+    FEATURE_EXTRACTOR: VGG16.roi_head
+    MLP_HEAD_DIM: 1024
+    NUM_CLASSES: 3
+    NUM_STACKED_CONVS: 4
+    POOLER_METHOD: ROIPool
+    POOLER_RESOLUTION: 7
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_SCALES: (0.125,)
+    PREDICTOR: FastRCNNPredictor
+    USE_GN: False
+  ROI_HEADS:
+    BATCH_SIZE_PER_IMAGE: 512
+    BBOX_REG_WEIGHTS: (10.0, 10.0, 5.0, 5.0)
+    BG_IOU_THRESHOLD: 0.5
+    DETECTIONS_PER_IMG: 100
+    FG_IOU_THRESHOLD: 0.5
+    NMS: 0.3
+    POSITIVE_FRACTION: 0.25
+    SCORE_THRESH: 0.0
+    USE_FPN: False
+  ROI_KEYPOINT_HEAD:
+    CONV_LAYERS: (512, 512, 512, 512, 512, 512, 512, 512)
+    FEATURE_EXTRACTOR: KeypointRCNNFeatureExtractor
+    MLP_HEAD_DIM: 1024
+    NUM_CLASSES: 17
+    POOLER_RESOLUTION: 14
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_SCALES: (0.0625,)
+    PREDICTOR: KeypointRCNNPredictor
+    RESOLUTION: 14
+    SHARE_BOX_FEATURE_EXTRACTOR: True
+  ROI_MASK_HEAD:
+    CONV_LAYERS: (256, 256, 256, 256)
+    DILATION: 1
+    FEATURE_EXTRACTOR: ResNet50Conv5ROIFeatureExtractor
+    MLP_HEAD_DIM: 1024
+    POOLER_RESOLUTION: 14
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_SCALES: (0.0625,)
+    POSTPROCESS_MASKS: False
+    POSTPROCESS_MASKS_THRESHOLD: 0.5
+    PREDICTOR: MaskRCNNC4Predictor
+    RESOLUTION: 14
+    SHARE_BOX_FEATURE_EXTRACTOR: True
+    USE_GN: False
+  ROI_WEAK_HEAD:
+    CENTER_LOSS_ALPHA: 0.5
+    CENTER_LOSS_WEIGHT: 0.003
+    LOSS: RoIRegLoss
+    OICR_P: 0.15
+    PARTIAL_LABELS: none
+    PREDICTOR: MISTPredictor
+    REGRESS_HEUR: AVG
+    REGRESS_ON: True
+    ROI_LOSS_REFINE: False
+    USE_TEMPLATE: False
+  RPN:
+    ANCHOR_SIZES: (32, 64, 128, 256, 512)
+    ANCHOR_STRIDE: (16,)
+    ASPECT_RATIOS: (0.5, 1.0, 2.0)
+    BATCH_SIZE_PER_IMAGE: 256
+    BG_IOU_THRESHOLD: 0.3
+    FG_IOU_THRESHOLD: 0.7
+    FPN_POST_NMS_PER_BATCH: True
+    FPN_POST_NMS_TOP_N_TEST: 2000
+    FPN_POST_NMS_TOP_N_TRAIN: 2000
+    MIN_SIZE: 0
+    NMS_THRESH: 0.7
+    POSITIVE_FRACTION: 0.5
+    POST_NMS_TOP_N_TEST: 1000
+    POST_NMS_TOP_N_TRAIN: 2000
+    PRE_NMS_TOP_N_TEST: 6000
+    PRE_NMS_TOP_N_TRAIN: 12000
+    RPN_HEAD: SingleConvRPNHead
+    STRADDLE_THRESH: 0
+    USE_FPN: False
+  RPN_ONLY: False
+  WEIGHT: catalog://VGGImageNetPretrained/JCJOHNS/VGG-16
+  WSOD_ON: True
+OUTPUT_DIR: output
+PATHS_CATALOG: /nfs/Workspace/ICMWSD/wetectron/config/paths_catalog.py
+PROPOSAL_FILES:
+  TEST: ('proposal/SS-ceymo_test-boxes.pkl',)
+  TRAIN: ('proposal/SS-ceymo_train-boxes.pkl',)
+SEED: 1234
+SOLVER:
+  BASE_LR: 0.01
+  BIAS_LR_FACTOR: 2
+  CHECKPOINT_PERIOD: 1000
+  GAMMA: 0.1
+  IMS_PER_BATCH: 8
+  ITER_SIZE: -1
+  MAX_ITER: 2000
+  MOMENTUM: 0.9
+  STEPS: (20000, 26700)
+  WARMUP_FACTOR: 0.3333333333333333
+  WARMUP_ITERS: 200
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_BIAS: 0
+SOLVER_CDB:
+  BASE_LR: 0.0001
+  BIAS_LR_FACTOR: 2
+  GAMMA: 3.0
+  MOMENTUM: 0.9
+  STEPS: (20000, 26700)
+  WARMUP_FACTOR: 0.3333333333333333
+  WARMUP_ITERS: 500
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_BIAS: 0
+TEST:
+  BBOX_AUG:
+    ENABLED: True
+    HEUR: AVG
+    H_FLIP: True
+    MAX_SIZE: 2000
+    SCALES: (480, 576, 688, 864, 1000, 1200)
+    SCALE_H_FLIP: True
+  DETECTIONS_PER_IMG: 100
+  EXPECTED_RESULTS: []
+  EXPECTED_RESULTS_SIGMA_TOL: 4
+  IMS_PER_BATCH: 8
+  VIS_THRES: 0.5
+2024-01-03 13:41:18,089 wetectron INFO: Saving config into: output/config.yml
+2024-01-03 13:41:28,774 wetectron.trainer INFO: Start training
+2024-01-03 13:42:05,113 wetectron.trainer INFO: eta: 0:59:16  iter: 20  loss: 1.3190 (1.7313)  loss_img: 0.2401 (0.2795)  loss_ref_cls0: 0.0115 (0.0122)  loss_ref_cls1: 0.2171 (0.2576)  loss_ref_cls2: 0.3570 (0.6565)  loss_ref_reg0: 0.0036 (0.0045)  loss_ref_reg1: 0.2819 (0.2816)  loss_ref_reg2: 0.2333 (0.2393)  acc_img: 0.8750 (0.8875)  acc_ref0: 0.8750 (0.9062)  acc_ref1: 1.0000 (0.9313)  acc_ref2: 0.8750 (0.9062)  time: 1.6529 (1.7960)  data: 0.0122 (0.0550)  lr: 0.004000  lr_cdb: 0.000036  max mem: 5772  loss_cdb: -0.0087
+2024-01-03 15:07:14,305 wetectron INFO: Using 4 GPUs
+2024-01-03 15:07:14,305 wetectron INFO: Namespace(config_file='config/ceymo/V_16_ceymo.yaml', local_rank=0, skip_test=False, opts=['OUTPUT_DIR', 'output'], use_tensorboard=True, distributed=True)
+2024-01-03 15:07:14,305 wetectron INFO: Collecting env info (might take some time)
+2024-01-03 15:07:17,673 wetectron INFO: 
+PyTorch version: 2.1.2
+Is debug build: False
+CUDA used to build PyTorch: 11.8
+ROCM used to build PyTorch: N/A
+
+OS: Ubuntu 18.04.6 LTS (x86_64)
+GCC version: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+Clang version: Could not collect
+CMake version: Could not collect
+Libc version: glibc-2.27
+
+Python version: 3.9.18 (main, Sep 11 2023, 13:41:44)  [GCC 11.2.0] (64-bit runtime)
+Python platform: Linux-5.4.0-125-generic-x86_64-with-glibc2.27
+Is CUDA available: True
+CUDA runtime version: 10.2.89
+CUDA_MODULE_LOADING set to: LAZY
+GPU models and configuration: 
+GPU 0: Tesla V100-SXM2-32GB-LS
+GPU 1: Tesla V100-SXM2-32GB-LS
+GPU 2: Tesla V100-SXM2-32GB-LS
+GPU 3: Tesla V100-SXM2-32GB-LS
+
+Nvidia driver version: 470.141.03
+cuDNN version: Probably one of the following:
+/usr/lib/x86_64-linux-gnu/libcudnn.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_infer.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_adv_train.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_infer.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_cnn_train.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_infer.so.8.5.0
+/usr/lib/x86_64-linux-gnu/libcudnn_ops_train.so.8.5.0
+HIP runtime version: N/A
+MIOpen runtime version: N/A
+Is XNNPACK available: True
+
+CPU:
+Architecture:        x86_64
+CPU op-mode(s):      32-bit, 64-bit
+Byte Order:          Little Endian
+CPU(s):              80
+On-line CPU(s) list: 0-79
+Thread(s) per core:  2
+Core(s) per socket:  20
+Socket(s):           2
+NUMA node(s):        2
+Vendor ID:           GenuineIntel
+CPU family:          6
+Model:               79
+Model name:          Intel(R) Xeon(R) CPU E5-2698 v4 @ 2.20GHz
+Stepping:            1
+CPU MHz:             2705.828
+CPU max MHz:         3600.0000
+CPU min MHz:         1200.0000
+BogoMIPS:            4389.73
+Virtualization:      VT-x
+L1d cache:           32K
+L1i cache:           32K
+L2 cache:            256K
+L3 cache:            51200K
+NUMA node0 CPU(s):   0-19,40-59
+NUMA node1 CPU(s):   20-39,60-79
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single pti intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap intel_pt xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts md_clear flush_l1d
+
+Versions of relevant libraries:
+[pip3] numpy==1.26.2
+[pip3] torch==2.1.2
+[pip3] torchaudio==2.1.2
+[pip3] torchvision==0.16.2
+[pip3] triton==2.1.0
+[conda] blas                      1.0                         mkl  
+[conda] ffmpeg                    4.3                  hf484d3e_0    pytorch
+[conda] libjpeg-turbo             2.0.0                h9bf148f_0    pytorch
+[conda] mkl                       2023.1.0         h213fc3f_46344  
+[conda] mkl-service               2.4.0            py39h5eee18b_1  
+[conda] mkl_fft                   1.3.8            py39h5eee18b_0  
+[conda] mkl_random                1.2.4            py39hdb19cb5_0  
+[conda] numpy                     1.26.2           py39h5f9d8c6_0  
+[conda] numpy-base                1.26.2           py39hb5e798b_0  
+[conda] pytorch                   2.1.2           py3.9_cuda11.8_cudnn8.7.0_0    pytorch
+[conda] pytorch-cuda              11.8                 h7e8668a_5    pytorch
+[conda] pytorch-mutex             1.0                        cuda    pytorch
+[conda] torchaudio                2.1.2                py39_cu118    pytorch
+[conda] torchtriton               2.1.0                      py39    pytorch
+[conda] torchvision               0.16.2               py39_cu118    pytorch
+        Pillow (10.0.1)
+2024-01-03 15:07:17,674 wetectron INFO: Loaded configuration file config/ceymo/V_16_ceymo.yaml
+2024-01-03 15:07:17,674 wetectron INFO: 
+MODEL:
+  META_ARCHITECTURE: "GeneralizedRCNN"
+  WEIGHT: "catalog://VGGImageNetPretrained/JCJOHNS/VGG-16" 
+  BACKBONE:
+    CONV_BODY: "VGG16-OICR"
+  WSOD_ON: True
+  FASTER_RCNN: False
+  ROI_HEADS:
+    SCORE_THRESH: 0.0
+    NMS: 0.3
+  ROI_BOX_HEAD:
+    NUM_CLASSES: 3
+    POOLER_METHOD: "ROIPool"
+    POOLER_RESOLUTION: 7
+    POOLER_SCALES: (0.125,)
+    FEATURE_EXTRACTOR: "VGG16.roi_head"
+  ROI_WEAK_HEAD:
+    PREDICTOR: "MISTPredictor"
+    LOSS: "RoIRegLoss"
+    OICR_P: 0.15
+    REGRESS_ON: True
+DB:
+  METHOD: 'concrete'
+DATASETS:
+  TRAIN: ("ceymo_train",)
+  TEST: ("ceymo_test",)
+PROPOSAL_FILES:
+  TRAIN: ('proposal/SS-ceymo_train-boxes.pkl',)
+  TEST:  ('proposal/SS-ceymo_test-boxes.pkl',)
+DATALOADER:
+  SIZE_DIVISIBILITY: 32
+INPUT:
+  MIN_SIZE_TRAIN: (480, 576, 688, 864, 1000, 1200) 
+  MAX_SIZE_TRAIN: 2000
+  MIN_SIZE_TEST: 800
+  MAX_SIZE_TEST: 2000
+SOLVER:
+  IMS_PER_BATCH: 8 #8
+  BASE_LR: 0.001
+  WEIGHT_DECAY: 0.0001
+  WARMUP_ITERS: 200 #200
+  STEPS: (20000, 26700) #(20000, 26700)
+  MAX_ITER: 2000 # 30000
+  CHECKPOINT_PERIOD: 1000 #1000
+SOLVER_CDB:
+  BASE_LR: 0.0001
+  GAMMA: 3.0
+  WEIGHT_DECAY: 0.0001
+  STEPS: (20000, 26700) #(20000, 26700)
+TEST:
+  BBOX_AUG:
+    ENABLED: True
+    HEUR: "AVG"
+    H_FLIP: True
+    SCALES: (480, 576, 688, 864, 1000, 1200) 
+    MAX_SIZE: 2000
+    SCALE_H_FLIP: True
+SEED: 1234
+2024-01-03 15:07:17,675 wetectron INFO: Running with config:
+AMP_VERBOSE: False
+DATALOADER:
+  ASPECT_RATIO_GROUPING: True
+  NUM_WORKERS: 4
+  SIZE_DIVISIBILITY: 32
+DATASETS:
+  TEST: ('ceymo_test',)
+  TRAIN: ('ceymo_train',)
+DB:
+  GSM_THRES: 0.01
+  IS_HARD: True
+  LR: 0.01
+  METHOD: concrete
+  OPTIMIZER: sgd
+  SIZE: 3
+  TAU: 0.3
+  WEIGHT: 0.01
+DTYPE: float32
+INPUT:
+  BRIGHTNESS: 0.0
+  CONTRAST: 0.0
+  HUE: 0.0
+  MAX_SIZE_TEST: 2000
+  MAX_SIZE_TRAIN: 2000
+  MIN_SIZE_TEST: 800
+  MIN_SIZE_TRAIN: (480, 576, 688, 864, 1000, 1200)
+  PCA: True
+  PIXEL_MEAN: [102.9801, 115.9465, 122.7717]
+  PIXEL_STD: [1.0, 1.0, 1.0]
+  SATURATION: 0.0
+  TO_BGR255: True
+  VERTICAL_FLIP_PROB_TRAIN: 0.0
+MODEL:
+  BACKBONE:
+    CONV_BODY: VGG16-OICR
+    FREEZE_CONV_BODY_AT: 2
+  CLS_AGNOSTIC_BBOX_REG: False
+  DEVICE: cuda
+  FASTER_RCNN: False
+  FBNET:
+    ARCH: default
+    ARCH_DEF: 
+    BN_TYPE: bn
+    DET_HEAD_BLOCKS: []
+    DET_HEAD_LAST_SCALE: 1.0
+    DET_HEAD_STRIDE: 0
+    DW_CONV_SKIP_BN: True
+    DW_CONV_SKIP_RELU: True
+    KPTS_HEAD_BLOCKS: []
+    KPTS_HEAD_LAST_SCALE: 0.0
+    KPTS_HEAD_STRIDE: 0
+    MASK_HEAD_BLOCKS: []
+    MASK_HEAD_LAST_SCALE: 0.0
+    MASK_HEAD_STRIDE: 0
+    RPN_BN_TYPE: 
+    RPN_HEAD_BLOCKS: 0
+    SCALE_FACTOR: 1.0
+    WIDTH_DIVISOR: 1
+  FPN:
+    USE_GN: False
+    USE_RELU: False
+  GROUP_NORM:
+    DIM_PER_GP: -1
+    EPSILON: 1e-05
+    NUM_GROUPS: 32
+  KEYPOINT_ON: False
+  MASK_ON: False
+  META_ARCHITECTURE: GeneralizedRCNN
+  RESNETS:
+    BACKBONE_OUT_CHANNELS: 1024
+    DEFORMABLE_GROUPS: 1
+    NUM_GROUPS: 1
+    RES2_OUT_CHANNELS: 256
+    RES5_DILATION: 1
+    STAGE_WITH_DCN: (False, False, False, False)
+    STEM_FUNC: StemWithFixedBatchNorm
+    STEM_OUT_CHANNELS: 64
+    STRIDE_IN_1X1: True
+    TRANS_FUNC: BottleneckWithFixedBatchNorm
+    WIDTH_PER_GROUP: 64
+    WITH_MODULATED_DCN: False
+  RETINANET:
+    ANCHOR_SIZES: (32, 64, 128, 256, 512)
+    ANCHOR_STRIDES: (8, 16, 32, 64, 128)
+    ASPECT_RATIOS: (0.5, 1.0, 2.0)
+    BBOX_REG_BETA: 0.11
+    BBOX_REG_WEIGHT: 4.0
+    BG_IOU_THRESHOLD: 0.4
+    FG_IOU_THRESHOLD: 0.5
+    INFERENCE_TH: 0.05
+    LOSS_ALPHA: 0.25
+    LOSS_GAMMA: 2.0
+    NMS_TH: 0.4
+    NUM_CLASSES: 81
+    NUM_CONVS: 4
+    OCTAVE: 2.0
+    PRE_NMS_TOP_N: 1000
+    PRIOR_PROB: 0.01
+    SCALES_PER_OCTAVE: 3
+    STRADDLE_THRESH: 0
+    USE_C5: True
+  RETINANET_ON: False
+  ROI_BOX_HEAD:
+    CONV_HEAD_DIM: 256
+    DILATION: 1
+    FEATURE_EXTRACTOR: VGG16.roi_head
+    MLP_HEAD_DIM: 1024
+    NUM_CLASSES: 3
+    NUM_STACKED_CONVS: 4
+    POOLER_METHOD: ROIPool
+    POOLER_RESOLUTION: 7
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_SCALES: (0.125,)
+    PREDICTOR: FastRCNNPredictor
+    USE_GN: False
+  ROI_HEADS:
+    BATCH_SIZE_PER_IMAGE: 512
+    BBOX_REG_WEIGHTS: (10.0, 10.0, 5.0, 5.0)
+    BG_IOU_THRESHOLD: 0.5
+    DETECTIONS_PER_IMG: 100
+    FG_IOU_THRESHOLD: 0.5
+    NMS: 0.3
+    POSITIVE_FRACTION: 0.25
+    SCORE_THRESH: 0.0
+    USE_FPN: False
+  ROI_KEYPOINT_HEAD:
+    CONV_LAYERS: (512, 512, 512, 512, 512, 512, 512, 512)
+    FEATURE_EXTRACTOR: KeypointRCNNFeatureExtractor
+    MLP_HEAD_DIM: 1024
+    NUM_CLASSES: 17
+    POOLER_RESOLUTION: 14
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_SCALES: (0.0625,)
+    PREDICTOR: KeypointRCNNPredictor
+    RESOLUTION: 14
+    SHARE_BOX_FEATURE_EXTRACTOR: True
+  ROI_MASK_HEAD:
+    CONV_LAYERS: (256, 256, 256, 256)
+    DILATION: 1
+    FEATURE_EXTRACTOR: ResNet50Conv5ROIFeatureExtractor
+    MLP_HEAD_DIM: 1024
+    POOLER_RESOLUTION: 14
+    POOLER_SAMPLING_RATIO: 0
+    POOLER_SCALES: (0.0625,)
+    POSTPROCESS_MASKS: False
+    POSTPROCESS_MASKS_THRESHOLD: 0.5
+    PREDICTOR: MaskRCNNC4Predictor
+    RESOLUTION: 14
+    SHARE_BOX_FEATURE_EXTRACTOR: True
+    USE_GN: False
+  ROI_WEAK_HEAD:
+    CENTER_LOSS_ALPHA: 0.5
+    CENTER_LOSS_WEIGHT: 0.003
+    LOSS: RoIRegLoss
+    OICR_P: 0.15
+    PARTIAL_LABELS: none
+    PREDICTOR: MISTPredictor
+    REGRESS_HEUR: AVG
+    REGRESS_ON: True
+    ROI_LOSS_REFINE: False
+    USE_TEMPLATE: False
+  RPN:
+    ANCHOR_SIZES: (32, 64, 128, 256, 512)
+    ANCHOR_STRIDE: (16,)
+    ASPECT_RATIOS: (0.5, 1.0, 2.0)
+    BATCH_SIZE_PER_IMAGE: 256
+    BG_IOU_THRESHOLD: 0.3
+    FG_IOU_THRESHOLD: 0.7
+    FPN_POST_NMS_PER_BATCH: True
+    FPN_POST_NMS_TOP_N_TEST: 2000
+    FPN_POST_NMS_TOP_N_TRAIN: 2000
+    MIN_SIZE: 0
+    NMS_THRESH: 0.7
+    POSITIVE_FRACTION: 0.5
+    POST_NMS_TOP_N_TEST: 1000
+    POST_NMS_TOP_N_TRAIN: 2000
+    PRE_NMS_TOP_N_TEST: 6000
+    PRE_NMS_TOP_N_TRAIN: 12000
+    RPN_HEAD: SingleConvRPNHead
+    STRADDLE_THRESH: 0
+    USE_FPN: False
+  RPN_ONLY: False
+  WEIGHT: catalog://VGGImageNetPretrained/JCJOHNS/VGG-16
+  WSOD_ON: True
+OUTPUT_DIR: output
+PATHS_CATALOG: /nfs/Workspace/ICMWSD/wetectron/config/paths_catalog.py
+PROPOSAL_FILES:
+  TEST: ('proposal/SS-ceymo_test-boxes.pkl',)
+  TRAIN: ('proposal/SS-ceymo_train-boxes.pkl',)
+SEED: 1234
+SOLVER:
+  BASE_LR: 0.001
+  BIAS_LR_FACTOR: 2
+  CHECKPOINT_PERIOD: 1000
+  GAMMA: 0.1
+  IMS_PER_BATCH: 8
+  ITER_SIZE: -1
+  MAX_ITER: 2000
+  MOMENTUM: 0.9
+  STEPS: (20000, 26700)
+  WARMUP_FACTOR: 0.3333333333333333
+  WARMUP_ITERS: 200
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_BIAS: 0
+SOLVER_CDB:
+  BASE_LR: 0.0001
+  BIAS_LR_FACTOR: 2
+  GAMMA: 3.0
+  MOMENTUM: 0.9
+  STEPS: (20000, 26700)
+  WARMUP_FACTOR: 0.3333333333333333
+  WARMUP_ITERS: 500
+  WARMUP_METHOD: linear
+  WEIGHT_DECAY: 0.0001
+  WEIGHT_DECAY_BIAS: 0
+TEST:
+  BBOX_AUG:
+    ENABLED: True
+    HEUR: AVG
+    H_FLIP: True
+    MAX_SIZE: 2000
+    SCALES: (480, 576, 688, 864, 1000, 1200)
+    SCALE_H_FLIP: True
+  DETECTIONS_PER_IMG: 100
+  EXPECTED_RESULTS: []
+  EXPECTED_RESULTS_SIGMA_TOL: 4
+  IMS_PER_BATCH: 8
+  VIS_THRES: 0.5
+2024-01-03 15:07:17,676 wetectron INFO: Saving config into: output/config.yml
+2024-01-03 15:07:26,590 wetectron.trainer INFO: Start training
+2024-01-03 15:08:03,109 wetectron.trainer INFO: eta: 0:59:33  iter: 20  loss: 1.7197 (1.8519)  loss_img: 0.1940 (0.2584)  loss_ref_cls0: 0.0150 (0.0155)  loss_ref_cls1: 0.3101 (0.3255)  loss_ref_cls2: 0.5526 (0.6100)  loss_ref_reg0: 0.0049 (0.0048)  loss_ref_reg1: 0.3316 (0.3491)  loss_ref_reg2: 0.2747 (0.2887)  acc_img: 0.8750 (0.8875)  acc_ref0: 0.8750 (0.8812)  acc_ref1: 1.0000 (0.9313)  acc_ref2: 0.8750 (0.9062)  time: 1.6732 (1.8046)  data: 0.0118 (0.0625)  lr: 0.000400  lr_cdb: 0.000036  max mem: 5772  loss_cdb: -0.0183
+2024-01-03 15:08:36,757 wetectron.trainer INFO: eta: 0:56:52  iter: 40  loss: 1.1151 (1.4915)  loss_img: 0.1412 (0.2328)  loss_ref_cls0: 0.0099 (0.0131)  loss_ref_cls1: 0.1836 (0.2572)  loss_ref_cls2: 0.2596 (0.4636)  loss_ref_reg0: 0.0035 (0.0042)  loss_ref_reg1: 0.2146 (0.2860)  loss_ref_reg2: 0.1629 (0.2345)  acc_img: 0.8750 (0.9094)  acc_ref0: 0.8750 (0.9062)  acc_ref1: 0.8750 (0.9313)  acc_ref2: 0.8750 (0.9187)  time: 1.6542 (1.7410)  data: 0.0113 (0.0475)  lr: 0.000467  lr_cdb: 0.000039  max mem: 5772  loss_cdb: -0.0088
+2024-01-03 15:09:10,383 wetectron.trainer INFO: eta: 0:55:41  iter: 60  loss: 0.9194 (1.2953)  loss_img: 0.0645 (0.2102)  loss_ref_cls0: 0.0088 (0.0117)  loss_ref_cls1: 0.1273 (0.2169)  loss_ref_cls2: 0.2127 (0.3879)  loss_ref_reg0: 0.0034 (0.0042)  loss_ref_reg1: 0.1762 (0.2529)  loss_ref_reg2: 0.1483 (0.2116)  acc_img: 1.0000 (0.9187)  acc_ref0: 1.0000 (0.9167)  acc_ref1: 1.0000 (0.9333)  acc_ref2: 1.0000 (0.9250)  time: 1.7150 (1.7223)  data: 0.0110 (0.0440)  lr: 0.000533  lr_cdb: 0.000041  max mem: 6374  loss_cdb: -0.0069
+2024-01-03 15:09:44,106 wetectron.trainer INFO: eta: 0:54:44  iter: 80  loss: 0.7893 (1.1702)  loss_img: 0.0717 (0.1888)  loss_ref_cls0: 0.0073 (0.0107)  loss_ref_cls1: 0.1135 (0.1920)  loss_ref_cls2: 0.2198 (0.3449)  loss_ref_reg0: 0.0041 (0.0042)  loss_ref_reg1: 0.1578 (0.2312)  loss_ref_reg2: 0.1575 (0.1984)  acc_img: 1.0000 (0.9281)  acc_ref0: 1.0000 (0.9266)  acc_ref1: 1.0000 (0.9391)  acc_ref2: 1.0000 (0.9328)  time: 1.6810 (1.7106)  data: 0.0120 (0.0418)  lr: 0.000600  lr_cdb: 0.000044  max mem: 6995  loss_cdb: -0.0064
+2024-01-03 15:10:17,916 wetectron.trainer INFO: eta: 0:54:08  iter: 100  loss: 0.8872 (1.1160)  loss_img: 0.0459 (0.1803)  loss_ref_cls0: 0.0083 (0.0103)  loss_ref_cls1: 0.1193 (0.1777)  loss_ref_cls2: 0.2720 (0.3275)  loss_ref_reg0: 0.0045 (0.0042)  loss_ref_reg1: 0.1571 (0.2181)  loss_ref_reg2: 0.1851 (0.1977)  acc_img: 1.0000 (0.9300)  acc_ref0: 1.0000 (0.9287)  acc_ref1: 1.0000 (0.9387)  acc_ref2: 1.0000 (0.9337)  time: 1.7250 (1.7098)  data: 0.0128 (0.0426)  lr: 0.000667  lr_cdb: 0.000047  max mem: 6995  loss_cdb: -0.0171
+2024-01-03 15:10:51,192 wetectron.trainer INFO: eta: 0:53:18  iter: 120  loss: 0.9863 (1.0990)  loss_img: 0.0805 (0.1797)  loss_ref_cls0: 0.0093 (0.0103)  loss_ref_cls1: 0.1283 (0.1695)  loss_ref_cls2: 0.2965 (0.3220)  loss_ref_reg0: 0.0068 (0.0046)  loss_ref_reg1: 0.1791 (0.2113)  loss_ref_reg2: 0.2255 (0.2016)  acc_img: 0.8750 (0.9292)  acc_ref0: 0.8750 (0.9281)  acc_ref1: 0.8750 (0.9365)  acc_ref2: 0.8750 (0.9323)  time: 1.6185 (1.7014)  data: 0.0117 (0.0403)  lr: 0.000733  lr_cdb: 0.000049  max mem: 6995  loss_cdb: -0.0074
+2024-01-03 15:11:25,437 wetectron.trainer INFO: eta: 0:52:44  iter: 140  loss: 0.9363 (1.0769)  loss_img: 0.0392 (0.1742)  loss_ref_cls0: 0.0082 (0.0100)  loss_ref_cls1: 0.1229 (0.1627)  loss_ref_cls2: 0.2564 (0.3138)  loss_ref_reg0: 0.0052 (0.0048)  loss_ref_reg1: 0.1743 (0.2069)  loss_ref_reg2: 0.2127 (0.2046)  acc_img: 1.0000 (0.9321)  acc_ref0: 1.0000 (0.9313)  acc_ref1: 1.0000 (0.9384)  acc_ref2: 1.0000 (0.9348)  time: 1.6818 (1.7014)  data: 0.0113 (0.0393)  lr: 0.000800  lr_cdb: 0.000052  max mem: 6995  loss_cdb: -0.0193
+2024-01-03 15:11:59,573 wetectron.trainer INFO: eta: 0:52:14  iter: 160  loss: 1.0206 (1.0674)  loss_img: 0.2051 (0.1771)  loss_ref_cls0: 0.0091 (0.0099)  loss_ref_cls1: 0.1161 (0.1578)  loss_ref_cls2: 0.2569 (0.3085)  loss_ref_reg0: 0.0068 (0.0050)  loss_ref_reg1: 0.1691 (0.2033)  loss_ref_reg2: 0.2076 (0.2058)  acc_img: 1.0000 (0.9297)  acc_ref0: 1.0000 (0.9289)  acc_ref1: 1.0000 (0.9352)  acc_ref2: 1.0000 (0.9320)  time: 1.7095 (1.7036)  data: 0.0124 (0.0399)  lr: 0.000867  lr_cdb: 0.000055  max mem: 6995  loss_cdb: -0.0059
+2024-01-03 15:12:32,506 wetectron.trainer INFO: eta: 0:51:26  iter: 180  loss: 0.9024 (1.0534)  loss_img: 0.0607 (0.1740)  loss_ref_cls0: 0.0085 (0.0098)  loss_ref_cls1: 0.1146 (0.1534)  loss_ref_cls2: 0.2713 (0.3036)  loss_ref_reg0: 0.0053 (0.0052)  loss_ref_reg1: 0.1697 (0.2002)  loss_ref_reg2: 0.2029 (0.2071)  acc_img: 1.0000 (0.9306)  acc_ref0: 1.0000 (0.9299)  acc_ref1: 1.0000 (0.9354)  acc_ref2: 1.0000 (0.9326)  time: 1.5717 (1.6958)  data: 0.0114 (0.0390)  lr: 0.000933  lr_cdb: 0.000057  max mem: 6995  loss_cdb: -0.0132
+2024-01-03 15:13:05,682 wetectron.trainer INFO: eta: 0:50:45  iter: 200  loss: 0.9949 (1.0455)  loss_img: 0.0515 (0.1725)  loss_ref_cls0: 0.0102 (0.0099)  loss_ref_cls1: 0.1050 (0.1494)  loss_ref_cls2: 0.2248 (0.2968)  loss_ref_reg0: 0.0060 (0.0053)  loss_ref_reg1: 0.1935 (0.1995)  loss_ref_reg2: 0.2331 (0.2121)  acc_img: 1.0000 (0.9319)  acc_ref0: 1.0000 (0.9313)  acc_ref1: 1.0000 (0.9363)  acc_ref2: 1.0000 (0.9337)  time: 1.7041 (1.6919)  data: 0.0114 (0.0396)  lr: 0.001000  lr_cdb: 0.000060  max mem: 6995  loss_cdb: -0.0063
+2024-01-03 15:13:38,955 wetectron.trainer INFO: eta: 0:50:08  iter: 220  loss: 0.8429 (1.0290)  loss_img: 0.0487 (0.1681)  loss_ref_cls0: 0.0095 (0.0099)  loss_ref_cls1: 0.0907 (0.1446)  loss_ref_cls2: 0.2187 (0.2902)  loss_ref_reg0: 0.0066 (0.0055)  loss_ref_reg1: 0.1716 (0.1976)  loss_ref_reg2: 0.2026 (0.2131)  acc_img: 1.0000 (0.9341)  acc_ref0: 1.0000 (0.9335)  acc_ref1: 1.0000 (0.9381)  acc_ref2: 1.0000 (0.9358)  time: 1.6400 (1.6903)  data: 0.0130 (0.0403)  lr: 0.001000  lr_cdb: 0.000063  max mem: 6995  loss_cdb: -0.0166
+2024-01-03 15:14:13,676 wetectron.trainer INFO: eta: 0:49:42  iter: 240  loss: 0.8801 (1.0183)  loss_img: 0.0294 (0.1630)  loss_ref_cls0: 0.0102 (0.0100)  loss_ref_cls1: 0.0880 (0.1400)  loss_ref_cls2: 0.2373 (0.2860)  loss_ref_reg0: 0.0066 (0.0055)  loss_ref_reg1: 0.1623 (0.1953)  loss_ref_reg2: 0.2526 (0.2185)  acc_img: 1.0000 (0.9365)  acc_ref0: 1.0000 (0.9359)  acc_ref1: 1.0000 (0.9401)  acc_ref2: 1.0000 (0.9380)  time: 1.7602 (1.6944)  data: 0.0129 (0.0400)  lr: 0.001000  lr_cdb: 0.000065  max mem: 6995  loss_cdb: -0.0077
+2024-01-03 15:14:45,354 wetectron.trainer INFO: eta: 0:48:52  iter: 260  loss: 0.8769 (1.0127)  loss_img: 0.0566 (0.1608)  loss_ref_cls0: 0.0124 (0.0102)  loss_ref_cls1: 0.1000 (0.1369)  loss_ref_cls2: 0.2273 (0.2816)  loss_ref_reg0: 0.0063 (0.0056)  loss_ref_reg1: 0.1768 (0.1942)  loss_ref_reg2: 0.2823 (0.2234)  acc_img: 1.0000 (0.9375)  acc_ref0: 1.0000 (0.9370)  acc_ref1: 1.0000 (0.9409)  acc_ref2: 1.0000 (0.9389)  time: 1.5715 (1.6853)  data: 0.0119 (0.0395)  lr: 0.001000  lr_cdb: 0.000068  max mem: 6995  loss_cdb: -0.0068
+2024-01-03 15:15:16,403 wetectron.trainer INFO: eta: 0:48:03  iter: 280  loss: 1.0172 (1.0066)  loss_img: 0.0323 (0.1592)  loss_ref_cls0: 0.0206 (0.0108)  loss_ref_cls1: 0.1247 (0.1361)  loss_ref_cls2: 0.2376 (0.2785)  loss_ref_reg0: 0.0067 (0.0058)  loss_ref_reg1: 0.1561 (0.1917)  loss_ref_reg2: 0.2245 (0.2244)  acc_img: 1.0000 (0.9384)  acc_ref0: 1.0000 (0.9379)  acc_ref1: 1.0000 (0.9415)  acc_ref2: 1.0000 (0.9397)  time: 1.5913 (1.6767)  data: 0.0119 (0.0395)  lr: 0.001000  lr_cdb: 0.000071  max mem: 6995  loss_cdb: -0.0050
+2024-01-03 15:15:48,884 wetectron.trainer INFO: eta: 0:47:22  iter: 300  loss: 0.8227 (0.9915)  loss_img: 0.0822 (0.1589)  loss_ref_cls0: 0.0081 (0.0106)  loss_ref_cls1: 0.1012 (0.1337)  loss_ref_cls2: 0.2084 (0.2740)  loss_ref_reg0: 0.0035 (0.0056)  loss_ref_reg1: 0.1295 (0.1881)  loss_ref_reg2: 0.1745 (0.2206)  acc_img: 0.8750 (0.9379)  acc_ref0: 0.8750 (0.9375)  acc_ref1: 0.8750 (0.9408)  acc_ref2: 0.8750 (0.9392)  time: 1.5783 (1.6722)  data: 0.0111 (0.0388)  lr: 0.001000  lr_cdb: 0.000073  max mem: 6995  loss_cdb: -0.0097
+2024-01-03 15:16:21,794 wetectron.trainer INFO: eta: 0:46:47  iter: 320  loss: 0.7327 (0.9794)  loss_img: 0.0262 (0.1565)  loss_ref_cls0: 0.0083 (0.0105)  loss_ref_cls1: 0.1095 (0.1321)  loss_ref_cls2: 0.2243 (0.2712)  loss_ref_reg0: 0.0035 (0.0055)  loss_ref_reg1: 0.1504 (0.1860)  loss_ref_reg2: 0.1637 (0.2174)  acc_img: 1.0000 (0.9391)  acc_ref0: 1.0000 (0.9387)  acc_ref1: 1.0000 (0.9418)  acc_ref2: 1.0000 (0.9402)  time: 1.6646 (1.6713)  data: 0.0111 (0.0391)  lr: 0.001000  lr_cdb: 0.000076  max mem: 6995  loss_cdb: -0.0154
+2024-01-03 15:16:54,309 wetectron.trainer INFO: eta: 0:46:09  iter: 340  loss: 0.6480 (0.9603)  loss_img: 0.1190 (0.1574)  loss_ref_cls0: 0.0060 (0.0103)  loss_ref_cls1: 0.0846 (0.1297)  loss_ref_cls2: 0.1549 (0.2652)  loss_ref_reg0: 0.0027 (0.0053)  loss_ref_reg1: 0.0937 (0.1814)  loss_ref_reg2: 0.0998 (0.2110)  acc_img: 1.0000 (0.9386)  acc_ref0: 1.0000 (0.9382)  acc_ref1: 1.0000 (0.9412)  acc_ref2: 1.0000 (0.9397)  time: 1.6257 (1.6685)  data: 0.0122 (0.0387)  lr: 0.001000  lr_cdb: 0.000079  max mem: 6995  loss_cdb: -0.0037
+2024-01-03 15:17:27,600 wetectron.trainer INFO: eta: 0:45:35  iter: 360  loss: 0.8037 (0.9498)  loss_img: 0.2222 (0.1609)  loss_ref_cls0: 0.0054 (0.0100)  loss_ref_cls1: 0.0803 (0.1270)  loss_ref_cls2: 0.1972 (0.2616)  loss_ref_reg0: 0.0034 (0.0052)  loss_ref_reg1: 0.1098 (0.1776)  loss_ref_reg2: 0.1454 (0.2075)  acc_img: 0.8750 (0.9368)  acc_ref0: 0.8750 (0.9368)  acc_ref1: 0.8750 (0.9396)  acc_ref2: 0.8750 (0.9382)  time: 1.6402 (1.6682)  data: 0.0121 (0.0384)  lr: 0.001000  lr_cdb: 0.000081  max mem: 6995  loss_cdb: -0.0087
+2024-01-03 15:18:00,890 wetectron.trainer INFO: eta: 0:45:01  iter: 380  loss: 0.8510 (0.9435)  loss_img: 0.1206 (0.1614)  loss_ref_cls0: 0.0061 (0.0098)  loss_ref_cls1: 0.0892 (0.1249)  loss_ref_cls2: 0.2476 (0.2607)  loss_ref_reg0: 0.0032 (0.0051)  loss_ref_reg1: 0.1218 (0.1751)  loss_ref_reg2: 0.1790 (0.2064)  acc_img: 0.8750 (0.9359)  acc_ref0: 0.8750 (0.9359)  acc_ref1: 0.8750 (0.9385)  acc_ref2: 0.8750 (0.9372)  time: 1.6451 (1.6674)  data: 0.0125 (0.0382)  lr: 0.001000  lr_cdb: 0.000084  max mem: 6995  loss_cdb: -0.0066
+2024-01-03 15:18:34,588 wetectron.trainer INFO: eta: 0:44:29  iter: 400  loss: 0.8194 (0.9387)  loss_img: 0.0497 (0.1615)  loss_ref_cls0: 0.0060 (0.0097)  loss_ref_cls1: 0.0808 (0.1227)  loss_ref_cls2: 0.2552 (0.2602)  loss_ref_reg0: 0.0038 (0.0051)  loss_ref_reg1: 0.1319 (0.1728)  loss_ref_reg2: 0.2078 (0.2067)  acc_img: 1.0000 (0.9359)  acc_ref0: 1.0000 (0.9359)  acc_ref1: 1.0000 (0.9384)  acc_ref2: 1.0000 (0.9372)  time: 1.6966 (1.6683)  data: 0.0109 (0.0385)  lr: 0.001000  lr_cdb: 0.000087  max mem: 6995  loss_cdb: -0.0055
+2024-01-03 15:19:08,497 wetectron.trainer INFO: eta: 0:43:58  iter: 420  loss: 0.7594 (0.9308)  loss_img: 0.1036 (0.1618)  loss_ref_cls0: 0.0063 (0.0095)  loss_ref_cls1: 0.0804 (0.1208)  loss_ref_cls2: 0.2253 (0.2583)  loss_ref_reg0: 0.0039 (0.0051)  loss_ref_reg1: 0.1129 (0.1702)  loss_ref_reg2: 0.1723 (0.2052)  acc_img: 1.0000 (0.9357)  acc_ref0: 1.0000 (0.9357)  acc_ref1: 1.0000 (0.9381)  acc_ref2: 1.0000 (0.9369)  time: 1.6770 (1.6702)  data: 0.0115 (0.0388)  lr: 0.001000  lr_cdb: 0.000089  max mem: 6995  loss_cdb: -0.0108
+2024-01-03 15:19:40,566 wetectron.trainer INFO: eta: 0:43:20  iter: 440  loss: 0.7747 (0.9245)  loss_img: 0.0633 (0.1603)  loss_ref_cls0: 0.0082 (0.0095)  loss_ref_cls1: 0.0842 (0.1192)  loss_ref_cls2: 0.2428 (0.2574)  loss_ref_reg0: 0.0042 (0.0050)  loss_ref_reg1: 0.1242 (0.1683)  loss_ref_reg2: 0.1895 (0.2048)  acc_img: 1.0000 (0.9361)  acc_ref0: 1.0000 (0.9361)  acc_ref1: 1.0000 (0.9384)  acc_ref2: 1.0000 (0.9372)  time: 1.6090 (1.6672)  data: 0.0107 (0.0384)  lr: 0.001000  lr_cdb: 0.000092  max mem: 6995  loss_cdb: -0.0084
+2024-01-03 15:20:12,749 wetectron.trainer INFO: eta: 0:42:43  iter: 460  loss: 0.8051 (0.9208)  loss_img: 0.0932 (0.1609)  loss_ref_cls0: 0.0079 (0.0095)  loss_ref_cls1: 0.0880 (0.1179)  loss_ref_cls2: 0.2326 (0.2563)  loss_ref_reg0: 0.0048 (0.0050)  loss_ref_reg1: 0.1268 (0.1670)  loss_ref_reg2: 0.1792 (0.2042)  acc_img: 1.0000 (0.9361)  acc_ref0: 1.0000 (0.9359)  acc_ref1: 1.0000 (0.9380)  acc_ref2: 1.0000 (0.9370)  time: 1.5640 (1.6644)  data: 0.0109 (0.0381)  lr: 0.001000  lr_cdb: 0.000095  max mem: 6995  loss_cdb: -0.0087
+2024-01-03 15:20:44,937 wetectron.trainer INFO: eta: 0:42:06  iter: 480  loss: 0.7342 (0.9152)  loss_img: 0.0298 (0.1589)  loss_ref_cls0: 0.0070 (0.0094)  loss_ref_cls1: 0.0870 (0.1168)  loss_ref_cls2: 0.2353 (0.2559)  loss_ref_reg0: 0.0042 (0.0050)  loss_ref_reg1: 0.1304 (0.1656)  loss_ref_reg2: 0.1969 (0.2036)  acc_img: 1.0000 (0.9378)  acc_ref0: 1.0000 (0.9375)  acc_ref1: 1.0000 (0.9396)  acc_ref2: 1.0000 (0.9385)  time: 1.6155 (1.6620)  data: 0.0115 (0.0381)  lr: 0.001000  lr_cdb: 0.000097  max mem: 6995  loss_cdb: -0.0090
+2024-01-03 15:21:17,246 wetectron.trainer INFO: eta: 0:41:30  iter: 500  loss: 0.8065 (0.9120)  loss_img: 0.0321 (0.1571)  loss_ref_cls0: 0.0077 (0.0093)  loss_ref_cls1: 0.0988 (0.1160)  loss_ref_cls2: 0.2532 (0.2561)  loss_ref_reg0: 0.0046 (0.0050)  loss_ref_reg1: 0.1388 (0.1647)  loss_ref_reg2: 0.1988 (0.2037)  acc_img: 1.0000 (0.9385)  acc_ref0: 1.0000 (0.9383)  acc_ref1: 1.0000 (0.9403)  acc_ref2: 1.0000 (0.9393)  time: 1.6060 (1.6606)  data: 0.0110 (0.0382)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0065
+2024-01-03 15:21:51,569 wetectron.trainer INFO: eta: 0:41:00  iter: 520  loss: 0.7214 (0.9057)  loss_img: 0.0308 (0.1549)  loss_ref_cls0: 0.0069 (0.0093)  loss_ref_cls1: 0.0877 (0.1150)  loss_ref_cls2: 0.2351 (0.2556)  loss_ref_reg0: 0.0040 (0.0050)  loss_ref_reg1: 0.1245 (0.1631)  loss_ref_reg2: 0.1848 (0.2029)  acc_img: 1.0000 (0.9394)  acc_ref0: 1.0000 (0.9392)  acc_ref1: 1.0000 (0.9411)  acc_ref2: 1.0000 (0.9401)  time: 1.7113 (1.6622)  data: 0.0122 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0069
+2024-01-03 15:22:23,492 wetectron.trainer INFO: eta: 0:40:23  iter: 540  loss: 0.8316 (0.9015)  loss_img: 0.0341 (0.1545)  loss_ref_cls0: 0.0062 (0.0092)  loss_ref_cls1: 0.0935 (0.1142)  loss_ref_cls2: 0.2340 (0.2550)  loss_ref_reg0: 0.0029 (0.0049)  loss_ref_reg1: 0.1170 (0.1616)  loss_ref_reg2: 0.1703 (0.2021)  acc_img: 1.0000 (0.9391)  acc_ref0: 1.0000 (0.9389)  acc_ref1: 1.0000 (0.9407)  acc_ref2: 1.0000 (0.9398)  time: 1.7075 (1.6599)  data: 0.0106 (0.0380)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0056
+2024-01-03 15:22:57,144 wetectron.trainer INFO: eta: 0:39:51  iter: 560  loss: 0.8308 (0.8994)  loss_img: 0.0845 (0.1542)  loss_ref_cls0: 0.0086 (0.0091)  loss_ref_cls1: 0.0926 (0.1135)  loss_ref_cls2: 0.2464 (0.2550)  loss_ref_reg0: 0.0042 (0.0049)  loss_ref_reg1: 0.1370 (0.1606)  loss_ref_reg2: 0.1934 (0.2021)  acc_img: 1.0000 (0.9395)  acc_ref0: 1.0000 (0.9393)  acc_ref1: 1.0000 (0.9411)  acc_ref2: 1.0000 (0.9402)  time: 1.6472 (1.6608)  data: 0.0118 (0.0380)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0093
+2024-01-03 15:23:30,609 wetectron.trainer INFO: eta: 0:39:19  iter: 580  loss: 0.8269 (0.8989)  loss_img: 0.0226 (0.1559)  loss_ref_cls0: 0.0074 (0.0091)  loss_ref_cls1: 0.0957 (0.1129)  loss_ref_cls2: 0.2506 (0.2550)  loss_ref_reg0: 0.0029 (0.0048)  loss_ref_reg1: 0.1251 (0.1596)  loss_ref_reg2: 0.1737 (0.2016)  acc_img: 1.0000 (0.9386)  acc_ref0: 1.0000 (0.9384)  acc_ref1: 1.0000 (0.9401)  acc_ref2: 1.0000 (0.9392)  time: 1.6152 (1.6613)  data: 0.0114 (0.0380)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0142
+2024-01-03 15:24:04,303 wetectron.trainer INFO: eta: 0:38:46  iter: 600  loss: 0.7113 (0.8940)  loss_img: 0.1142 (0.1560)  loss_ref_cls0: 0.0058 (0.0090)  loss_ref_cls1: 0.0815 (0.1119)  loss_ref_cls2: 0.2097 (0.2539)  loss_ref_reg0: 0.0033 (0.0048)  loss_ref_reg1: 0.1089 (0.1578)  loss_ref_reg2: 0.1679 (0.2006)  acc_img: 0.8750 (0.9381)  acc_ref0: 0.8750 (0.9379)  acc_ref1: 0.8750 (0.9396)  acc_ref2: 0.8750 (0.9387)  time: 1.7329 (1.6620)  data: 0.0122 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0059
+2024-01-03 15:24:37,482 wetectron.trainer INFO: eta: 0:38:13  iter: 620  loss: 0.7553 (0.8907)  loss_img: 0.0407 (0.1551)  loss_ref_cls0: 0.0068 (0.0089)  loss_ref_cls1: 0.0873 (0.1111)  loss_ref_cls2: 0.2610 (0.2539)  loss_ref_reg0: 0.0043 (0.0048)  loss_ref_reg1: 0.1141 (0.1565)  loss_ref_reg2: 0.1876 (0.2004)  acc_img: 1.0000 (0.9383)  acc_ref0: 1.0000 (0.9381)  acc_ref1: 1.0000 (0.9397)  acc_ref2: 1.0000 (0.9389)  time: 1.7050 (1.6621)  data: 0.0100 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0070
+2024-01-03 15:25:09,593 wetectron.trainer INFO: eta: 0:37:37  iter: 640  loss: 0.8249 (0.8913)  loss_img: 0.0350 (0.1538)  loss_ref_cls0: 0.0084 (0.0089)  loss_ref_cls1: 0.0986 (0.1107)  loss_ref_cls2: 0.2938 (0.2552)  loss_ref_reg0: 0.0055 (0.0048)  loss_ref_reg1: 0.1425 (0.1561)  loss_ref_reg2: 0.2209 (0.2017)  acc_img: 1.0000 (0.9389)  acc_ref0: 1.0000 (0.9387)  acc_ref1: 1.0000 (0.9402)  acc_ref2: 1.0000 (0.9395)  time: 1.5767 (1.6602)  data: 0.0102 (0.0376)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0089
+2024-01-03 15:25:43,122 wetectron.trainer INFO: eta: 0:37:05  iter: 660  loss: 0.8036 (0.8895)  loss_img: 0.0466 (0.1532)  loss_ref_cls0: 0.0073 (0.0089)  loss_ref_cls1: 0.0953 (0.1103)  loss_ref_cls2: 0.2565 (0.2552)  loss_ref_reg0: 0.0039 (0.0048)  loss_ref_reg1: 0.1333 (0.1554)  loss_ref_reg2: 0.2052 (0.2017)  acc_img: 1.0000 (0.9390)  acc_ref0: 1.0000 (0.9388)  acc_ref1: 1.0000 (0.9403)  acc_ref2: 1.0000 (0.9396)  time: 1.6820 (1.6608)  data: 0.0103 (0.0375)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0057
+2024-01-03 15:26:16,761 wetectron.trainer INFO: eta: 0:36:32  iter: 680  loss: 0.8082 (0.8875)  loss_img: 0.0747 (0.1530)  loss_ref_cls0: 0.0077 (0.0088)  loss_ref_cls1: 0.0948 (0.1099)  loss_ref_cls2: 0.2386 (0.2551)  loss_ref_reg0: 0.0043 (0.0048)  loss_ref_reg1: 0.1219 (0.1546)  loss_ref_reg2: 0.1852 (0.2012)  acc_img: 1.0000 (0.9388)  acc_ref0: 1.0000 (0.9386)  acc_ref1: 1.0000 (0.9401)  acc_ref2: 1.0000 (0.9393)  time: 1.7050 (1.6612)  data: 0.0131 (0.0374)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0053
+2024-01-03 15:26:49,552 wetectron.trainer INFO: eta: 0:35:58  iter: 700  loss: 0.8500 (0.8868)  loss_img: 0.1339 (0.1530)  loss_ref_cls0: 0.0087 (0.0088)  loss_ref_cls1: 0.0956 (0.1094)  loss_ref_cls2: 0.2651 (0.2554)  loss_ref_reg0: 0.0052 (0.0048)  loss_ref_reg1: 0.1224 (0.1539)  loss_ref_reg2: 0.1989 (0.2014)  acc_img: 0.8750 (0.9382)  acc_ref0: 0.8750 (0.9380)  acc_ref1: 0.8750 (0.9395)  acc_ref2: 0.8750 (0.9387)  time: 1.6284 (1.6606)  data: 0.0109 (0.0374)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0134
+2024-01-03 15:27:22,032 wetectron.trainer INFO: eta: 0:35:24  iter: 720  loss: 0.8466 (0.8854)  loss_img: 0.1059 (0.1520)  loss_ref_cls0: 0.0097 (0.0089)  loss_ref_cls1: 0.0984 (0.1091)  loss_ref_cls2: 0.2575 (0.2556)  loss_ref_reg0: 0.0046 (0.0048)  loss_ref_reg1: 0.1333 (0.1534)  loss_ref_reg2: 0.1953 (0.2016)  acc_img: 1.0000 (0.9385)  acc_ref0: 1.0000 (0.9385)  acc_ref1: 1.0000 (0.9399)  acc_ref2: 1.0000 (0.9392)  time: 1.5895 (1.6597)  data: 0.0106 (0.0375)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0047
+2024-01-03 15:27:56,423 wetectron.trainer INFO: eta: 0:34:52  iter: 740  loss: 0.7449 (0.8829)  loss_img: 0.0328 (0.1513)  loss_ref_cls0: 0.0080 (0.0089)  loss_ref_cls1: 0.0900 (0.1085)  loss_ref_cls2: 0.2571 (0.2557)  loss_ref_reg0: 0.0044 (0.0048)  loss_ref_reg1: 0.1071 (0.1523)  loss_ref_reg2: 0.1809 (0.2013)  acc_img: 1.0000 (0.9387)  acc_ref0: 1.0000 (0.9389)  acc_ref1: 1.0000 (0.9402)  acc_ref2: 1.0000 (0.9395)  time: 1.7542 (1.6608)  data: 0.0121 (0.0374)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0060
+2024-01-03 15:28:30,615 wetectron.trainer INFO: eta: 0:34:21  iter: 760  loss: 0.8364 (0.8822)  loss_img: 0.1287 (0.1519)  loss_ref_cls0: 0.0081 (0.0089)  loss_ref_cls1: 0.0911 (0.1081)  loss_ref_cls2: 0.2543 (0.2560)  loss_ref_reg0: 0.0046 (0.0048)  loss_ref_reg1: 0.1154 (0.1514)  loss_ref_reg2: 0.1713 (0.2010)  acc_img: 1.0000 (0.9385)  acc_ref0: 1.0000 (0.9387)  acc_ref1: 1.0000 (0.9400)  acc_ref2: 1.0000 (0.9393)  time: 1.7443 (1.6624)  data: 0.0121 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0200
+2024-01-03 15:29:02,325 wetectron.trainer INFO: eta: 0:33:45  iter: 780  loss: 0.7725 (0.8804)  loss_img: 0.0182 (0.1501)  loss_ref_cls0: 0.0092 (0.0089)  loss_ref_cls1: 0.0971 (0.1079)  loss_ref_cls2: 0.2877 (0.2567)  loss_ref_reg0: 0.0048 (0.0048)  loss_ref_reg1: 0.1321 (0.1508)  loss_ref_reg2: 0.1953 (0.2012)  acc_img: 1.0000 (0.9393)  acc_ref0: 1.0000 (0.9394)  acc_ref1: 1.0000 (0.9407)  acc_ref2: 1.0000 (0.9401)  time: 1.5809 (1.6605)  data: 0.0105 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0075
+2024-01-03 15:29:35,280 wetectron.trainer INFO: eta: 0:33:12  iter: 800  loss: 0.7216 (0.8772)  loss_img: 0.0242 (0.1494)  loss_ref_cls0: 0.0090 (0.0090)  loss_ref_cls1: 0.0916 (0.1074)  loss_ref_cls2: 0.2400 (0.2564)  loss_ref_reg0: 0.0046 (0.0048)  loss_ref_reg1: 0.1128 (0.1499)  loss_ref_reg2: 0.1587 (0.2003)  acc_img: 1.0000 (0.9394)  acc_ref0: 1.0000 (0.9395)  acc_ref1: 1.0000 (0.9408)  acc_ref2: 1.0000 (0.9402)  time: 1.6569 (1.6600)  data: 0.0092 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0062
+2024-01-03 15:30:08,727 wetectron.trainer INFO: eta: 0:32:39  iter: 820  loss: 0.8170 (0.8760)  loss_img: 0.0409 (0.1480)  loss_ref_cls0: 0.0099 (0.0090)  loss_ref_cls1: 0.1001 (0.1073)  loss_ref_cls2: 0.2766 (0.2570)  loss_ref_reg0: 0.0045 (0.0049)  loss_ref_reg1: 0.1298 (0.1495)  loss_ref_reg2: 0.1963 (0.2004)  acc_img: 1.0000 (0.9398)  acc_ref0: 1.0000 (0.9399)  acc_ref1: 1.0000 (0.9412)  acc_ref2: 1.0000 (0.9405)  time: 1.7012 (1.6607)  data: 0.0101 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0106
+2024-01-03 15:30:41,179 wetectron.trainer INFO: eta: 0:32:05  iter: 840  loss: 0.7976 (0.8750)  loss_img: 0.0202 (0.1466)  loss_ref_cls0: 0.0130 (0.0091)  loss_ref_cls1: 0.0981 (0.1072)  loss_ref_cls2: 0.2721 (0.2576)  loss_ref_reg0: 0.0060 (0.0049)  loss_ref_reg1: 0.1206 (0.1492)  loss_ref_reg2: 0.1865 (0.2005)  acc_img: 1.0000 (0.9403)  acc_ref0: 1.0000 (0.9405)  acc_ref1: 1.0000 (0.9417)  acc_ref2: 1.0000 (0.9411)  time: 1.6101 (1.6596)  data: 0.0109 (0.0377)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0091
+2024-01-03 15:31:14,154 wetectron.trainer INFO: eta: 0:31:31  iter: 860  loss: 0.8804 (0.8751)  loss_img: 0.0422 (0.1457)  loss_ref_cls0: 0.0120 (0.0092)  loss_ref_cls1: 0.1074 (0.1071)  loss_ref_cls2: 0.3116 (0.2587)  loss_ref_reg0: 0.0050 (0.0049)  loss_ref_reg1: 0.1344 (0.1488)  loss_ref_reg2: 0.1927 (0.2008)  acc_img: 1.0000 (0.9404)  acc_ref0: 1.0000 (0.9406)  acc_ref1: 1.0000 (0.9417)  acc_ref2: 1.0000 (0.9411)  time: 1.6998 (1.6595)  data: 0.0121 (0.0377)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0072
+2024-01-03 15:31:48,026 wetectron.trainer INFO: eta: 0:30:59  iter: 880  loss: 0.7798 (0.8733)  loss_img: 0.0531 (0.1448)  loss_ref_cls0: 0.0105 (0.0092)  loss_ref_cls1: 0.0949 (0.1069)  loss_ref_cls2: 0.2736 (0.2589)  loss_ref_reg0: 0.0052 (0.0049)  loss_ref_reg1: 0.1166 (0.1481)  loss_ref_reg2: 0.1737 (0.2005)  acc_img: 1.0000 (0.9406)  acc_ref0: 1.0000 (0.9408)  acc_ref1: 1.0000 (0.9419)  acc_ref2: 1.0000 (0.9413)  time: 1.7050 (1.6601)  data: 0.0122 (0.0376)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0073
+2024-01-03 15:32:20,797 wetectron.trainer INFO: eta: 0:30:25  iter: 900  loss: 0.8441 (0.8731)  loss_img: 0.0191 (0.1432)  loss_ref_cls0: 0.0133 (0.0093)  loss_ref_cls1: 0.1139 (0.1071)  loss_ref_cls2: 0.2766 (0.2596)  loss_ref_reg0: 0.0064 (0.0049)  loss_ref_reg1: 0.1337 (0.1480)  loss_ref_reg2: 0.2066 (0.2009)  acc_img: 1.0000 (0.9413)  acc_ref0: 1.0000 (0.9414)  acc_ref1: 1.0000 (0.9425)  acc_ref2: 1.0000 (0.9419)  time: 1.6641 (1.6596)  data: 0.0104 (0.0377)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0072
+2024-01-03 15:32:53,488 wetectron.trainer INFO: eta: 0:29:51  iter: 920  loss: 0.7648 (0.8714)  loss_img: 0.0280 (0.1422)  loss_ref_cls0: 0.0130 (0.0094)  loss_ref_cls1: 0.0969 (0.1070)  loss_ref_cls2: 0.2535 (0.2598)  loss_ref_reg0: 0.0062 (0.0050)  loss_ref_reg1: 0.1185 (0.1474)  loss_ref_reg2: 0.1695 (0.2007)  acc_img: 1.0000 (0.9414)  acc_ref0: 1.0000 (0.9416)  acc_ref1: 1.0000 (0.9427)  acc_ref2: 1.0000 (0.9421)  time: 1.6686 (1.6592)  data: 0.0127 (0.0377)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0063
+2024-01-03 15:33:25,818 wetectron.trainer INFO: eta: 0:29:17  iter: 940  loss: 0.8068 (0.8700)  loss_img: 0.1161 (0.1422)  loss_ref_cls0: 0.0108 (0.0095)  loss_ref_cls1: 0.0957 (0.1068)  loss_ref_cls2: 0.2501 (0.2599)  loss_ref_reg0: 0.0050 (0.0050)  loss_ref_reg1: 0.1099 (0.1466)  loss_ref_reg2: 0.1647 (0.2001)  acc_img: 0.8750 (0.9408)  acc_ref0: 0.8750 (0.9410)  acc_ref1: 0.8750 (0.9420)  acc_ref2: 0.8750 (0.9415)  time: 1.5654 (1.6581)  data: 0.0098 (0.0376)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0063
+2024-01-03 15:33:59,940 wetectron.trainer INFO: eta: 0:28:45  iter: 960  loss: 0.7247 (0.8681)  loss_img: 0.1030 (0.1419)  loss_ref_cls0: 0.0156 (0.0096)  loss_ref_cls1: 0.0943 (0.1066)  loss_ref_cls2: 0.2586 (0.2598)  loss_ref_reg0: 0.0062 (0.0050)  loss_ref_reg1: 0.0965 (0.1458)  loss_ref_reg2: 0.1742 (0.1995)  acc_img: 0.8750 (0.9405)  acc_ref0: 0.8750 (0.9406)  acc_ref1: 0.8750 (0.9417)  acc_ref2: 0.8750 (0.9411)  time: 1.6856 (1.6593)  data: 0.0120 (0.0377)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0093
+2024-01-03 15:34:31,922 wetectron.trainer INFO: eta: 0:28:11  iter: 980  loss: 0.7665 (0.8657)  loss_img: 0.1056 (0.1415)  loss_ref_cls0: 0.0168 (0.0097)  loss_ref_cls1: 0.0805 (0.1061)  loss_ref_cls2: 0.2497 (0.2597)  loss_ref_reg0: 0.0059 (0.0051)  loss_ref_reg1: 0.0923 (0.1447)  loss_ref_reg2: 0.1716 (0.1990)  acc_img: 0.8750 (0.9403)  acc_ref0: 0.8750 (0.9402)  acc_ref1: 0.8750 (0.9412)  acc_ref2: 0.8750 (0.9407)  time: 1.5438 (1.6581)  data: 0.0112 (0.0377)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0070
+2024-01-03 15:35:03,933 wetectron.trainer INFO: eta: 0:27:37  iter: 1000  loss: 0.6472 (0.8615)  loss_img: 0.0766 (0.1409)  loss_ref_cls0: 0.0161 (0.0099)  loss_ref_cls1: 0.0793 (0.1057)  loss_ref_cls2: 0.2031 (0.2588)  loss_ref_reg0: 0.0082 (0.0051)  loss_ref_reg1: 0.0849 (0.1435)  loss_ref_reg2: 0.1243 (0.1976)  acc_img: 1.0000 (0.9404)  acc_ref0: 0.8750 (0.9401)  acc_ref1: 0.8750 (0.9411)  acc_ref2: 0.8750 (0.9406)  time: 1.5716 (1.6570)  data: 0.0110 (0.0375)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0052
+2024-01-03 15:35:40,701 wetectron.trainer INFO: eta: 0:27:07  iter: 1020  loss: 0.6782 (0.8589)  loss_img: 0.0513 (0.1403)  loss_ref_cls0: 0.0167 (0.0100)  loss_ref_cls1: 0.0958 (0.1055)  loss_ref_cls2: 0.2440 (0.2585)  loss_ref_reg0: 0.0080 (0.0052)  loss_ref_reg1: 0.1029 (0.1426)  loss_ref_reg2: 0.1445 (0.1966)  acc_img: 1.0000 (0.9406)  acc_ref0: 1.0000 (0.9402)  acc_ref1: 1.0000 (0.9412)  acc_ref2: 1.0000 (0.9407)  time: 1.6706 (1.6604)  data: 0.0103 (0.0405)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0038
+2024-01-03 15:36:14,597 wetectron.trainer INFO: eta: 0:26:34  iter: 1040  loss: 0.6885 (0.8559)  loss_img: 0.0613 (0.1397)  loss_ref_cls0: 0.0152 (0.0102)  loss_ref_cls1: 0.0809 (0.1050)  loss_ref_cls2: 0.2422 (0.2582)  loss_ref_reg0: 0.0064 (0.0052)  loss_ref_reg1: 0.0789 (0.1416)  loss_ref_reg2: 0.1500 (0.1959)  acc_img: 0.8750 (0.9404)  acc_ref0: 1.0000 (0.9401)  acc_ref1: 1.0000 (0.9411)  acc_ref2: 1.0000 (0.9406)  time: 1.7034 (1.6610)  data: 0.0125 (0.0404)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0087
+2024-01-03 15:36:47,446 wetectron.trainer INFO: eta: 0:26:01  iter: 1060  loss: 0.7042 (0.8537)  loss_img: 0.0981 (0.1396)  loss_ref_cls0: 0.0139 (0.0103)  loss_ref_cls1: 0.0894 (0.1048)  loss_ref_cls2: 0.2249 (0.2578)  loss_ref_reg0: 0.0075 (0.0053)  loss_ref_reg1: 0.0970 (0.1408)  loss_ref_reg2: 0.1516 (0.1951)  acc_img: 1.0000 (0.9403)  acc_ref0: 1.0000 (0.9403)  acc_ref1: 1.0000 (0.9413)  acc_ref2: 1.0000 (0.9408)  time: 1.6393 (1.6608)  data: 0.0105 (0.0403)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0073
+2024-01-03 15:37:19,452 wetectron.trainer INFO: eta: 0:25:26  iter: 1080  loss: 0.6488 (0.8507)  loss_img: 0.0242 (0.1390)  loss_ref_cls0: 0.0169 (0.0104)  loss_ref_cls1: 0.0885 (0.1045)  loss_ref_cls2: 0.2258 (0.2573)  loss_ref_reg0: 0.0075 (0.0053)  loss_ref_reg1: 0.0963 (0.1399)  loss_ref_reg2: 0.1447 (0.1942)  acc_img: 1.0000 (0.9404)  acc_ref0: 1.0000 (0.9403)  acc_ref1: 1.0000 (0.9412)  acc_ref2: 1.0000 (0.9407)  time: 1.6073 (1.6596)  data: 0.0105 (0.0402)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0076
+2024-01-03 15:37:53,036 wetectron.trainer INFO: eta: 0:24:53  iter: 1100  loss: 0.7076 (0.8487)  loss_img: 0.0383 (0.1380)  loss_ref_cls0: 0.0145 (0.0106)  loss_ref_cls1: 0.0938 (0.1044)  loss_ref_cls2: 0.2579 (0.2573)  loss_ref_reg0: 0.0078 (0.0054)  loss_ref_reg1: 0.1044 (0.1394)  loss_ref_reg2: 0.1539 (0.1936)  acc_img: 1.0000 (0.9407)  acc_ref0: 1.0000 (0.9405)  acc_ref1: 1.0000 (0.9414)  acc_ref2: 1.0000 (0.9409)  time: 1.7171 (1.6600)  data: 0.0104 (0.0401)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0053
+2024-01-03 15:38:25,631 wetectron.trainer INFO: eta: 0:24:20  iter: 1120  loss: 0.6521 (0.8452)  loss_img: 0.0648 (0.1378)  loss_ref_cls0: 0.0134 (0.0106)  loss_ref_cls1: 0.0740 (0.1039)  loss_ref_cls2: 0.2150 (0.2565)  loss_ref_reg0: 0.0056 (0.0054)  loss_ref_reg1: 0.0814 (0.1384)  loss_ref_reg2: 0.1329 (0.1926)  acc_img: 1.0000 (0.9407)  acc_ref0: 1.0000 (0.9404)  acc_ref1: 1.0000 (0.9413)  acc_ref2: 1.0000 (0.9408)  time: 1.6341 (1.6594)  data: 0.0110 (0.0400)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0051
+2024-01-03 15:39:00,369 wetectron.trainer INFO: eta: 0:23:48  iter: 1140  loss: 0.6836 (0.8420)  loss_img: 0.0206 (0.1364)  loss_ref_cls0: 0.0233 (0.0109)  loss_ref_cls1: 0.0766 (0.1035)  loss_ref_cls2: 0.2443 (0.2564)  loss_ref_reg0: 0.0090 (0.0055)  loss_ref_reg1: 0.0916 (0.1375)  loss_ref_reg2: 0.1506 (0.1919)  acc_img: 1.0000 (0.9412)  acc_ref0: 1.0000 (0.9407)  acc_ref1: 1.0000 (0.9416)  acc_ref2: 1.0000 (0.9411)  time: 1.7287 (1.6608)  data: 0.0109 (0.0399)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0077
+2024-01-03 15:39:33,750 wetectron.trainer INFO: eta: 0:23:15  iter: 1160  loss: 0.6055 (0.8378)  loss_img: 0.0185 (0.1357)  loss_ref_cls0: 0.0197 (0.0111)  loss_ref_cls1: 0.0608 (0.1029)  loss_ref_cls2: 0.1973 (0.2554)  loss_ref_reg0: 0.0096 (0.0056)  loss_ref_reg1: 0.0839 (0.1365)  loss_ref_reg2: 0.1114 (0.1906)  acc_img: 1.0000 (0.9416)  acc_ref0: 1.0000 (0.9411)  acc_ref1: 1.0000 (0.9419)  acc_ref2: 1.0000 (0.9415)  time: 1.6834 (1.6611)  data: 0.0130 (0.0398)  lr: 0.001000  lr_cdb: 0.000100  max mem: 6995  loss_cdb: -0.0054
+2024-01-03 15:40:07,225 wetectron.trainer INFO: eta: 0:22:42  iter: 1180  loss: 0.5765 (0.8338)  loss_img: 0.0603 (0.1352)  loss_ref_cls0: 0.0121 (0.0111)  loss_ref_cls1: 0.0701 (0.1024)  loss_ref_cls2: 0.2000 (0.2547)  loss_ref_reg0: 0.0054 (0.0056)  loss_ref_reg1: 0.0749 (0.1356)  loss_ref_reg2: 0.1086 (0.1893)  acc_img: 1.0000 (0.9414)  acc_ref0: 1.0000 (0.9408)  acc_ref1: 1.0000 (0.9416)  acc_ref2: 1.0000 (0.9412)  time: 1.6741 (1.6610)  data: 0.0120 (0.0396)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0076
+2024-01-03 15:40:40,167 wetectron.trainer INFO: eta: 0:22:08  iter: 1200  loss: 0.5902 (0.8304)  loss_img: 0.0552 (0.1346)  loss_ref_cls0: 0.0162 (0.0112)  loss_ref_cls1: 0.0868 (0.1022)  loss_ref_cls2: 0.1940 (0.2537)  loss_ref_reg0: 0.0082 (0.0056)  loss_ref_reg1: 0.0928 (0.1350)  loss_ref_reg2: 0.1091 (0.1880)  acc_img: 1.0000 (0.9417)  acc_ref0: 1.0000 (0.9409)  acc_ref1: 1.0000 (0.9418)  acc_ref2: 1.0000 (0.9414)  time: 1.6365 (1.6610)  data: 0.0108 (0.0397)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0052
+2024-01-03 15:41:13,663 wetectron.trainer INFO: eta: 0:21:35  iter: 1220  loss: 0.6018 (0.8271)  loss_img: 0.0738 (0.1346)  loss_ref_cls0: 0.0138 (0.0113)  loss_ref_cls1: 0.0697 (0.1019)  loss_ref_cls2: 0.1722 (0.2527)  loss_ref_reg0: 0.0071 (0.0057)  loss_ref_reg1: 0.0840 (0.1343)  loss_ref_reg2: 0.1029 (0.1866)  acc_img: 0.8750 (0.9416)  acc_ref0: 0.8750 (0.9408)  acc_ref1: 0.8750 (0.9416)  acc_ref2: 0.8750 (0.9412)  time: 1.6812 (1.6612)  data: 0.0116 (0.0396)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0046
+2024-01-03 15:41:46,505 wetectron.trainer INFO: eta: 0:21:02  iter: 1240  loss: 0.6157 (0.8242)  loss_img: 0.1197 (0.1344)  loss_ref_cls0: 0.0129 (0.0113)  loss_ref_cls1: 0.0771 (0.1015)  loss_ref_cls2: 0.2179 (0.2521)  loss_ref_reg0: 0.0071 (0.0057)  loss_ref_reg1: 0.0885 (0.1335)  loss_ref_reg2: 0.1256 (0.1856)  acc_img: 0.8750 (0.9413)  acc_ref0: 0.8750 (0.9404)  acc_ref1: 0.8750 (0.9412)  acc_ref2: 0.8750 (0.9408)  time: 1.6703 (1.6608)  data: 0.0115 (0.0395)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0045
+2024-01-03 15:42:20,213 wetectron.trainer INFO: eta: 0:20:29  iter: 1260  loss: 0.6642 (0.8218)  loss_img: 0.0298 (0.1337)  loss_ref_cls0: 0.0139 (0.0114)  loss_ref_cls1: 0.0878 (0.1014)  loss_ref_cls2: 0.2238 (0.2516)  loss_ref_reg0: 0.0068 (0.0057)  loss_ref_reg1: 0.1056 (0.1331)  loss_ref_reg2: 0.1354 (0.1848)  acc_img: 1.0000 (0.9416)  acc_ref0: 1.0000 (0.9405)  acc_ref1: 1.0000 (0.9413)  acc_ref2: 1.0000 (0.9409)  time: 1.7225 (1.6613)  data: 0.0113 (0.0395)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0046
+2024-01-03 15:42:53,509 wetectron.trainer INFO: eta: 0:19:56  iter: 1280  loss: 0.6393 (0.8195)  loss_img: 0.0873 (0.1331)  loss_ref_cls0: 0.0156 (0.0115)  loss_ref_cls1: 0.0908 (0.1012)  loss_ref_cls2: 0.2131 (0.2511)  loss_ref_reg0: 0.0086 (0.0058)  loss_ref_reg1: 0.1092 (0.1327)  loss_ref_reg2: 0.1257 (0.1841)  acc_img: 0.8750 (0.9414)  acc_ref0: 0.8750 (0.9404)  acc_ref1: 0.8750 (0.9412)  acc_ref2: 0.8750 (0.9408)  time: 1.6160 (1.6613)  data: 0.0106 (0.0393)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0054
+2024-01-03 15:43:26,551 wetectron.trainer INFO: eta: 0:19:22  iter: 1300  loss: 0.6073 (0.8165)  loss_img: 0.0503 (0.1325)  loss_ref_cls0: 0.0178 (0.0116)  loss_ref_cls1: 0.0825 (0.1010)  loss_ref_cls2: 0.1989 (0.2504)  loss_ref_reg0: 0.0091 (0.0058)  loss_ref_reg1: 0.0870 (0.1322)  loss_ref_reg2: 0.1109 (0.1831)  acc_img: 1.0000 (0.9413)  acc_ref0: 1.0000 (0.9405)  acc_ref1: 1.0000 (0.9413)  acc_ref2: 1.0000 (0.9409)  time: 1.6206 (1.6611)  data: 0.0118 (0.0392)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0142
+2024-01-03 15:43:58,746 wetectron.trainer INFO: eta: 0:18:48  iter: 1320  loss: 0.6496 (0.8144)  loss_img: 0.0789 (0.1321)  loss_ref_cls0: 0.0208 (0.0117)  loss_ref_cls1: 0.0902 (0.1009)  loss_ref_cls2: 0.2122 (0.2498)  loss_ref_reg0: 0.0109 (0.0059)  loss_ref_reg1: 0.1011 (0.1318)  loss_ref_reg2: 0.1274 (0.1822)  acc_img: 1.0000 (0.9414)  acc_ref0: 1.0000 (0.9402)  acc_ref1: 1.0000 (0.9410)  acc_ref2: 1.0000 (0.9406)  time: 1.6690 (1.6603)  data: 0.0122 (0.0391)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0105
+2024-01-03 15:44:32,199 wetectron.trainer INFO: eta: 0:18:15  iter: 1340  loss: 0.5820 (0.8115)  loss_img: 0.0990 (0.1321)  loss_ref_cls0: 0.0149 (0.0118)  loss_ref_cls1: 0.0766 (0.1005)  loss_ref_cls2: 0.1836 (0.2489)  loss_ref_reg0: 0.0069 (0.0060)  loss_ref_reg1: 0.0822 (0.1311)  loss_ref_reg2: 0.1078 (0.1811)  acc_img: 0.8750 (0.9410)  acc_ref0: 0.8750 (0.9394)  acc_ref1: 0.8750 (0.9401)  acc_ref2: 0.8750 (0.9397)  time: 1.6988 (1.6606)  data: 0.0096 (0.0392)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0106
+2024-01-03 15:45:06,334 wetectron.trainer INFO: eta: 0:17:43  iter: 1360  loss: 0.6798 (0.8102)  loss_img: 0.0328 (0.1320)  loss_ref_cls0: 0.0305 (0.0121)  loss_ref_cls1: 0.0914 (0.1005)  loss_ref_cls2: 0.2083 (0.2484)  loss_ref_reg0: 0.0115 (0.0061)  loss_ref_reg1: 0.1009 (0.1308)  loss_ref_reg2: 0.1120 (0.1802)  acc_img: 1.0000 (0.9411)  acc_ref0: 1.0000 (0.9392)  acc_ref1: 1.0000 (0.9399)  acc_ref2: 1.0000 (0.9395)  time: 1.6960 (1.6612)  data: 0.0101 (0.0391)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0032
+2024-01-03 15:45:39,631 wetectron.trainer INFO: eta: 0:17:10  iter: 1380  loss: 0.5344 (0.8064)  loss_img: 0.0407 (0.1312)  loss_ref_cls0: 0.0170 (0.0122)  loss_ref_cls1: 0.0559 (0.0999)  loss_ref_cls2: 0.1937 (0.2477)  loss_ref_reg0: 0.0061 (0.0061)  loss_ref_reg1: 0.0596 (0.1298)  loss_ref_reg2: 0.1273 (0.1795)  acc_img: 1.0000 (0.9416)  acc_ref0: 1.0000 (0.9397)  acc_ref1: 1.0000 (0.9404)  acc_ref2: 1.0000 (0.9400)  time: 1.6834 (1.6613)  data: 0.0123 (0.0391)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0068
+2024-01-03 15:46:12,285 wetectron.trainer INFO: eta: 0:16:36  iter: 1400  loss: 0.6567 (0.8044)  loss_img: 0.0199 (0.1304)  loss_ref_cls0: 0.0163 (0.0123)  loss_ref_cls1: 0.0819 (0.0996)  loss_ref_cls2: 0.2269 (0.2474)  loss_ref_reg0: 0.0069 (0.0062)  loss_ref_reg1: 0.0922 (0.1293)  loss_ref_reg2: 0.1547 (0.1793)  acc_img: 1.0000 (0.9419)  acc_ref0: 1.0000 (0.9399)  acc_ref1: 1.0000 (0.9406)  acc_ref2: 1.0000 (0.9403)  time: 1.5798 (1.6609)  data: 0.0115 (0.0389)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0069
+2024-01-03 15:46:45,750 wetectron.trainer INFO: eta: 0:16:03  iter: 1420  loss: 0.6169 (0.8022)  loss_img: 0.0425 (0.1301)  loss_ref_cls0: 0.0137 (0.0123)  loss_ref_cls1: 0.0741 (0.0993)  loss_ref_cls2: 0.2240 (0.2470)  loss_ref_reg0: 0.0068 (0.0062)  loss_ref_reg1: 0.0839 (0.1287)  loss_ref_reg2: 0.1380 (0.1787)  acc_img: 1.0000 (0.9416)  acc_ref0: 1.0000 (0.9399)  acc_ref1: 1.0000 (0.9406)  acc_ref2: 1.0000 (0.9402)  time: 1.6329 (1.6610)  data: 0.0121 (0.0388)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0051
+2024-01-03 15:47:18,959 wetectron.trainer INFO: eta: 0:15:30  iter: 1440  loss: 0.6258 (0.7999)  loss_img: 0.0256 (0.1290)  loss_ref_cls0: 0.0214 (0.0125)  loss_ref_cls1: 0.0922 (0.0992)  loss_ref_cls2: 0.2154 (0.2466)  loss_ref_reg0: 0.0090 (0.0062)  loss_ref_reg1: 0.1068 (0.1284)  loss_ref_reg2: 0.1338 (0.1780)  acc_img: 1.0000 (0.9421)  acc_ref0: 1.0000 (0.9404)  acc_ref1: 1.0000 (0.9411)  acc_ref2: 1.0000 (0.9407)  time: 1.6776 (1.6611)  data: 0.0124 (0.0388)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0082
+2024-01-03 15:47:50,792 wetectron.trainer INFO: eta: 0:14:56  iter: 1460  loss: 0.6046 (0.7973)  loss_img: 0.0450 (0.1284)  loss_ref_cls0: 0.0242 (0.0126)  loss_ref_cls1: 0.0553 (0.0987)  loss_ref_cls2: 0.1920 (0.2461)  loss_ref_reg0: 0.0122 (0.0063)  loss_ref_reg1: 0.0701 (0.1277)  loss_ref_reg2: 0.1357 (0.1775)  acc_img: 1.0000 (0.9421)  acc_ref0: 1.0000 (0.9403)  acc_ref1: 1.0000 (0.9410)  acc_ref2: 1.0000 (0.9407)  time: 1.5619 (1.6601)  data: 0.0122 (0.0388)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0063
+2024-01-03 15:48:24,544 wetectron.trainer INFO: eta: 0:14:23  iter: 1480  loss: 0.5640 (0.7944)  loss_img: 0.0240 (0.1275)  loss_ref_cls0: 0.0221 (0.0128)  loss_ref_cls1: 0.0675 (0.0983)  loss_ref_cls2: 0.2050 (0.2456)  loss_ref_reg0: 0.0112 (0.0064)  loss_ref_reg1: 0.0804 (0.1271)  loss_ref_reg2: 0.1262 (0.1769)  acc_img: 1.0000 (0.9424)  acc_ref0: 1.0000 (0.9405)  acc_ref1: 1.0000 (0.9412)  acc_ref2: 1.0000 (0.9409)  time: 1.6935 (1.6605)  data: 0.0116 (0.0386)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0053
+2024-01-03 15:48:56,165 wetectron.trainer INFO: eta: 0:13:49  iter: 1500  loss: 0.5918 (0.7920)  loss_img: 0.0568 (0.1272)  loss_ref_cls0: 0.0199 (0.0129)  loss_ref_cls1: 0.0703 (0.0979)  loss_ref_cls2: 0.1930 (0.2450)  loss_ref_reg0: 0.0087 (0.0064)  loss_ref_reg1: 0.0812 (0.1265)  loss_ref_reg2: 0.1036 (0.1761)  acc_img: 1.0000 (0.9423)  acc_ref0: 0.8750 (0.9403)  acc_ref1: 0.8750 (0.9409)  acc_ref2: 0.8750 (0.9406)  time: 1.5639 (1.6595)  data: 0.0117 (0.0386)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0107
+2024-01-03 15:49:28,437 wetectron.trainer INFO: eta: 0:13:16  iter: 1520  loss: 0.6155 (0.7900)  loss_img: 0.0608 (0.1269)  loss_ref_cls0: 0.0190 (0.0130)  loss_ref_cls1: 0.0781 (0.0976)  loss_ref_cls2: 0.2017 (0.2445)  loss_ref_reg0: 0.0097 (0.0065)  loss_ref_reg1: 0.0843 (0.1260)  loss_ref_reg2: 0.1227 (0.1754)  acc_img: 1.0000 (0.9423)  acc_ref0: 0.8750 (0.9400)  acc_ref1: 0.8750 (0.9406)  acc_ref2: 0.8750 (0.9403)  time: 1.6347 (1.6588)  data: 0.0112 (0.0385)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0052
+2024-01-03 15:50:00,133 wetectron.trainer INFO: eta: 0:12:42  iter: 1540  loss: 0.6621 (0.7886)  loss_img: 0.0837 (0.1263)  loss_ref_cls0: 0.0199 (0.0131)  loss_ref_cls1: 0.0870 (0.0976)  loss_ref_cls2: 0.2259 (0.2443)  loss_ref_reg0: 0.0106 (0.0066)  loss_ref_reg1: 0.1001 (0.1258)  loss_ref_reg2: 0.1352 (0.1749)  acc_img: 1.0000 (0.9425)  acc_ref0: 1.0000 (0.9402)  acc_ref1: 1.0000 (0.9408)  acc_ref2: 1.0000 (0.9405)  time: 1.6004 (1.6579)  data: 0.0119 (0.0384)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0076
+2024-01-03 15:50:33,179 wetectron.trainer INFO: eta: 0:12:09  iter: 1560  loss: 0.6581 (0.7873)  loss_img: 0.0348 (0.1258)  loss_ref_cls0: 0.0222 (0.0133)  loss_ref_cls1: 0.0836 (0.0974)  loss_ref_cls2: 0.2112 (0.2441)  loss_ref_reg0: 0.0119 (0.0066)  loss_ref_reg1: 0.0934 (0.1256)  loss_ref_reg2: 0.1502 (0.1746)  acc_img: 1.0000 (0.9425)  acc_ref0: 1.0000 (0.9402)  acc_ref1: 1.0000 (0.9409)  acc_ref2: 1.0000 (0.9405)  time: 1.6022 (1.6577)  data: 0.0107 (0.0383)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0091
+2024-01-03 15:51:04,146 wetectron.trainer INFO: eta: 0:11:35  iter: 1580  loss: 0.6365 (0.7856)  loss_img: 0.0766 (0.1252)  loss_ref_cls0: 0.0222 (0.0134)  loss_ref_cls1: 0.0792 (0.0973)  loss_ref_cls2: 0.2010 (0.2437)  loss_ref_reg0: 0.0105 (0.0067)  loss_ref_reg1: 0.0890 (0.1252)  loss_ref_reg2: 0.1359 (0.1742)  acc_img: 1.0000 (0.9427)  acc_ref0: 1.0000 (0.9402)  acc_ref1: 1.0000 (0.9408)  acc_ref2: 1.0000 (0.9405)  time: 1.4952 (1.6566)  data: 0.0106 (0.0383)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0132
+2024-01-03 15:51:37,189 wetectron.trainer INFO: eta: 0:11:02  iter: 1600  loss: 0.5922 (0.7832)  loss_img: 0.0722 (0.1247)  loss_ref_cls0: 0.0185 (0.0135)  loss_ref_cls1: 0.0674 (0.0970)  loss_ref_cls2: 0.1990 (0.2432)  loss_ref_reg0: 0.0091 (0.0067)  loss_ref_reg1: 0.0707 (0.1246)  loss_ref_reg2: 0.1219 (0.1736)  acc_img: 1.0000 (0.9428)  acc_ref0: 1.0000 (0.9403)  acc_ref1: 1.0000 (0.9409)  acc_ref2: 1.0000 (0.9406)  time: 1.6690 (1.6564)  data: 0.0095 (0.0381)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0070
+2024-01-03 15:52:08,912 wetectron.trainer INFO: eta: 0:10:29  iter: 1620  loss: 0.6116 (0.7813)  loss_img: 0.0223 (0.1239)  loss_ref_cls0: 0.0232 (0.0136)  loss_ref_cls1: 0.0847 (0.0968)  loss_ref_cls2: 0.1944 (0.2428)  loss_ref_reg0: 0.0128 (0.0068)  loss_ref_reg1: 0.0985 (0.1243)  loss_ref_reg2: 0.1301 (0.1731)  acc_img: 1.0000 (0.9432)  acc_ref0: 1.0000 (0.9404)  acc_ref1: 1.0000 (0.9410)  acc_ref2: 1.0000 (0.9407)  time: 1.4856 (1.6556)  data: 0.0110 (0.0380)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0090
+2024-01-03 15:52:42,864 wetectron.trainer INFO: eta: 0:09:56  iter: 1640  loss: 0.6295 (0.7798)  loss_img: 0.0377 (0.1233)  loss_ref_cls0: 0.0250 (0.0138)  loss_ref_cls1: 0.0838 (0.0966)  loss_ref_cls2: 0.1996 (0.2423)  loss_ref_reg0: 0.0129 (0.0069)  loss_ref_reg1: 0.1009 (0.1241)  loss_ref_reg2: 0.1304 (0.1727)  acc_img: 1.0000 (0.9434)  acc_ref0: 1.0000 (0.9403)  acc_ref1: 1.0000 (0.9409)  acc_ref2: 1.0000 (0.9406)  time: 1.6413 (1.6560)  data: 0.0123 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0051
+2024-01-03 15:53:16,148 wetectron.trainer INFO: eta: 0:09:23  iter: 1660  loss: 0.6617 (0.7781)  loss_img: 0.0449 (0.1230)  loss_ref_cls0: 0.0269 (0.0140)  loss_ref_cls1: 0.0609 (0.0963)  loss_ref_cls2: 0.1815 (0.2418)  loss_ref_reg0: 0.0128 (0.0070)  loss_ref_reg1: 0.0830 (0.1237)  loss_ref_reg2: 0.1174 (0.1722)  acc_img: 1.0000 (0.9434)  acc_ref0: 1.0000 (0.9402)  acc_ref1: 1.0000 (0.9408)  acc_ref2: 1.0000 (0.9405)  time: 1.6165 (1.6560)  data: 0.0127 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0020
+2024-01-03 15:53:50,894 wetectron.trainer INFO: eta: 0:08:50  iter: 1680  loss: 0.4984 (0.7756)  loss_img: 0.0855 (0.1227)  loss_ref_cls0: 0.0220 (0.0142)  loss_ref_cls1: 0.0524 (0.0959)  loss_ref_cls2: 0.1629 (0.2411)  loss_ref_reg0: 0.0104 (0.0071)  loss_ref_reg1: 0.0691 (0.1231)  loss_ref_reg2: 0.1027 (0.1716)  acc_img: 1.0000 (0.9435)  acc_ref0: 0.8750 (0.9401)  acc_ref1: 0.8750 (0.9407)  acc_ref2: 0.8750 (0.9404)  time: 1.7250 (1.6570)  data: 0.0142 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0044
+2024-01-03 15:54:25,095 wetectron.trainer INFO: eta: 0:08:17  iter: 1700  loss: 0.5675 (0.7735)  loss_img: 0.0801 (0.1224)  loss_ref_cls0: 0.0212 (0.0143)  loss_ref_cls1: 0.0676 (0.0956)  loss_ref_cls2: 0.1859 (0.2404)  loss_ref_reg0: 0.0102 (0.0071)  loss_ref_reg1: 0.0864 (0.1227)  loss_ref_reg2: 0.1156 (0.1710)  acc_img: 1.0000 (0.9433)  acc_ref0: 0.8750 (0.9397)  acc_ref1: 0.8750 (0.9403)  acc_ref2: 0.8750 (0.9400)  time: 1.6977 (1.6576)  data: 0.0107 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0055
+2024-01-03 15:54:58,856 wetectron.trainer INFO: eta: 0:07:44  iter: 1720  loss: 0.5320 (0.7709)  loss_img: 0.0305 (0.1218)  loss_ref_cls0: 0.0239 (0.0144)  loss_ref_cls1: 0.0598 (0.0953)  loss_ref_cls2: 0.1700 (0.2397)  loss_ref_reg0: 0.0112 (0.0072)  loss_ref_reg1: 0.0720 (0.1221)  loss_ref_reg2: 0.1108 (0.1704)  acc_img: 1.0000 (0.9434)  acc_ref0: 1.0000 (0.9397)  acc_ref1: 1.0000 (0.9403)  acc_ref2: 1.0000 (0.9400)  time: 1.6925 (1.6578)  data: 0.0118 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0031
+2024-01-03 15:55:32,566 wetectron.trainer INFO: eta: 0:07:11  iter: 1740  loss: 0.6069 (0.7690)  loss_img: 0.0081 (0.1209)  loss_ref_cls0: 0.0290 (0.0146)  loss_ref_cls1: 0.0698 (0.0950)  loss_ref_cls2: 0.2144 (0.2395)  loss_ref_reg0: 0.0150 (0.0073)  loss_ref_reg1: 0.0807 (0.1217)  loss_ref_reg2: 0.1383 (0.1700)  acc_img: 1.0000 (0.9437)  acc_ref0: 1.0000 (0.9400)  acc_ref1: 1.0000 (0.9406)  acc_ref2: 1.0000 (0.9403)  time: 1.6876 (1.6584)  data: 0.0116 (0.0380)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0057
+2024-01-03 15:56:06,309 wetectron.trainer INFO: eta: 0:06:38  iter: 1760  loss: 0.5003 (0.7662)  loss_img: 0.0074 (0.1199)  loss_ref_cls0: 0.0238 (0.0147)  loss_ref_cls1: 0.0578 (0.0946)  loss_ref_cls2: 0.1857 (0.2390)  loss_ref_reg0: 0.0115 (0.0074)  loss_ref_reg1: 0.0690 (0.1211)  loss_ref_reg2: 0.1219 (0.1694)  acc_img: 1.0000 (0.9442)  acc_ref0: 1.0000 (0.9403)  acc_ref1: 1.0000 (0.9409)  acc_ref2: 1.0000 (0.9406)  time: 1.6891 (1.6587)  data: 0.0104 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0050
+2024-01-03 15:56:39,695 wetectron.trainer INFO: eta: 0:06:04  iter: 1780  loss: 0.5338 (0.7640)  loss_img: 0.0127 (0.1191)  loss_ref_cls0: 0.0225 (0.0148)  loss_ref_cls1: 0.0810 (0.0945)  loss_ref_cls2: 0.1831 (0.2385)  loss_ref_reg0: 0.0119 (0.0074)  loss_ref_reg1: 0.0923 (0.1208)  loss_ref_reg2: 0.1130 (0.1688)  acc_img: 1.0000 (0.9445)  acc_ref0: 1.0000 (0.9405)  acc_ref1: 1.0000 (0.9411)  acc_ref2: 1.0000 (0.9408)  time: 1.6785 (1.6588)  data: 0.0126 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0065
+2024-01-03 15:57:12,507 wetectron.trainer INFO: eta: 0:05:31  iter: 1800  loss: 0.6204 (0.7626)  loss_img: 0.0663 (0.1190)  loss_ref_cls0: 0.0200 (0.0149)  loss_ref_cls1: 0.0756 (0.0943)  loss_ref_cls2: 0.1962 (0.2381)  loss_ref_reg0: 0.0107 (0.0075)  loss_ref_reg1: 0.0844 (0.1204)  loss_ref_reg2: 0.1237 (0.1684)  acc_img: 0.8750 (0.9442)  acc_ref0: 0.8750 (0.9404)  acc_ref1: 0.8750 (0.9410)  acc_ref2: 0.8750 (0.9407)  time: 1.6629 (1.6586)  data: 0.0116 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0085
+2024-01-03 15:57:43,995 wetectron.trainer INFO: eta: 0:04:58  iter: 1820  loss: 0.5567 (0.7606)  loss_img: 0.0416 (0.1184)  loss_ref_cls0: 0.0186 (0.0150)  loss_ref_cls1: 0.0678 (0.0941)  loss_ref_cls2: 0.1930 (0.2377)  loss_ref_reg0: 0.0097 (0.0075)  loss_ref_reg1: 0.0854 (0.1201)  loss_ref_reg2: 0.1152 (0.1679)  acc_img: 1.0000 (0.9442)  acc_ref0: 0.8750 (0.9404)  acc_ref1: 0.8750 (0.9409)  acc_ref2: 0.8750 (0.9407)  time: 1.5760 (1.6576)  data: 0.0098 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0035
+2024-01-03 15:58:17,750 wetectron.trainer INFO: eta: 0:04:25  iter: 1840  loss: 0.4939 (0.7583)  loss_img: 0.0224 (0.1178)  loss_ref_cls0: 0.0184 (0.0150)  loss_ref_cls1: 0.0616 (0.0938)  loss_ref_cls2: 0.1834 (0.2372)  loss_ref_reg0: 0.0100 (0.0075)  loss_ref_reg1: 0.0712 (0.1196)  loss_ref_reg2: 0.1106 (0.1673)  acc_img: 1.0000 (0.9444)  acc_ref0: 1.0000 (0.9405)  acc_ref1: 1.0000 (0.9410)  acc_ref2: 1.0000 (0.9408)  time: 1.7089 (1.6579)  data: 0.0125 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0074
+2024-01-03 15:58:49,818 wetectron.trainer INFO: eta: 0:03:52  iter: 1860  loss: 0.5693 (0.7562)  loss_img: 0.0501 (0.1173)  loss_ref_cls0: 0.0207 (0.0151)  loss_ref_cls1: 0.0697 (0.0936)  loss_ref_cls2: 0.1774 (0.2366)  loss_ref_reg0: 0.0107 (0.0076)  loss_ref_reg1: 0.0824 (0.1192)  loss_ref_reg2: 0.1232 (0.1668)  acc_img: 1.0000 (0.9445)  acc_ref0: 0.8750 (0.9403)  acc_ref1: 0.8750 (0.9409)  acc_ref2: 0.8750 (0.9406)  time: 1.6393 (1.6574)  data: 0.0108 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0068
+2024-01-03 15:59:23,140 wetectron.trainer INFO: eta: 0:03:18  iter: 1880  loss: 0.5887 (0.7545)  loss_img: 0.0271 (0.1167)  loss_ref_cls0: 0.0255 (0.0152)  loss_ref_cls1: 0.0732 (0.0934)  loss_ref_cls2: 0.1878 (0.2362)  loss_ref_reg0: 0.0135 (0.0077)  loss_ref_reg1: 0.0838 (0.1189)  loss_ref_reg2: 0.1256 (0.1664)  acc_img: 1.0000 (0.9447)  acc_ref0: 1.0000 (0.9404)  acc_ref1: 1.0000 (0.9409)  acc_ref2: 1.0000 (0.9406)  time: 1.6384 (1.6574)  data: 0.0098 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0061
+2024-01-03 15:59:55,892 wetectron.trainer INFO: eta: 0:02:45  iter: 1900  loss: 0.5387 (0.7528)  loss_img: 0.0284 (0.1163)  loss_ref_cls0: 0.0214 (0.0154)  loss_ref_cls1: 0.0622 (0.0931)  loss_ref_cls2: 0.1752 (0.2356)  loss_ref_reg0: 0.0124 (0.0077)  loss_ref_reg1: 0.0754 (0.1186)  loss_ref_reg2: 0.1258 (0.1660)  acc_img: 1.0000 (0.9450)  acc_ref0: 1.0000 (0.9403)  acc_ref1: 1.0000 (0.9409)  acc_ref2: 1.0000 (0.9406)  time: 1.5471 (1.6572)  data: 0.0117 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0040
+2024-01-03 16:00:29,180 wetectron.trainer INFO: eta: 0:02:12  iter: 1920  loss: 0.6032 (0.7514)  loss_img: 0.0348 (0.1157)  loss_ref_cls0: 0.0285 (0.0155)  loss_ref_cls1: 0.0728 (0.0929)  loss_ref_cls2: 0.1948 (0.2353)  loss_ref_reg0: 0.0170 (0.0078)  loss_ref_reg1: 0.0997 (0.1184)  loss_ref_reg2: 0.1294 (0.1658)  acc_img: 1.0000 (0.9452)  acc_ref0: 0.8750 (0.9398)  acc_ref1: 0.8750 (0.9403)  acc_ref2: 0.8750 (0.9400)  time: 1.6837 (1.6573)  data: 0.0115 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0113
+2024-01-03 16:01:02,146 wetectron.trainer INFO: eta: 0:01:39  iter: 1940  loss: 0.6448 (0.7505)  loss_img: 0.0362 (0.1151)  loss_ref_cls0: 0.0309 (0.0157)  loss_ref_cls1: 0.0770 (0.0928)  loss_ref_cls2: 0.2118 (0.2350)  loss_ref_reg0: 0.0150 (0.0079)  loss_ref_reg1: 0.1003 (0.1183)  loss_ref_reg2: 0.1353 (0.1657)  acc_img: 1.0000 (0.9455)  acc_ref0: 1.0000 (0.9398)  acc_ref1: 1.0000 (0.9403)  acc_ref2: 1.0000 (0.9401)  time: 1.6349 (1.6573)  data: 0.0111 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0049
+2024-01-03 16:01:36,219 wetectron.trainer INFO: eta: 0:01:06  iter: 1960  loss: 0.5650 (0.7489)  loss_img: 0.0032 (0.1141)  loss_ref_cls0: 0.0416 (0.0161)  loss_ref_cls1: 0.0641 (0.0926)  loss_ref_cls2: 0.1943 (0.2346)  loss_ref_reg0: 0.0229 (0.0082)  loss_ref_reg1: 0.0852 (0.1180)  loss_ref_reg2: 0.1307 (0.1653)  acc_img: 1.0000 (0.9459)  acc_ref0: 1.0000 (0.9401)  acc_ref1: 1.0000 (0.9406)  acc_ref2: 1.0000 (0.9403)  time: 1.6981 (1.6576)  data: 0.0105 (0.0378)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0029
+2024-01-03 16:02:09,716 wetectron.trainer INFO: eta: 0:00:33  iter: 1980  loss: 0.5388 (0.7468)  loss_img: 0.0045 (0.1133)  loss_ref_cls0: 0.0322 (0.0163)  loss_ref_cls1: 0.0579 (0.0923)  loss_ref_cls2: 0.1851 (0.2341)  loss_ref_reg0: 0.0174 (0.0083)  loss_ref_reg1: 0.0765 (0.1176)  loss_ref_reg2: 0.1267 (0.1650)  acc_img: 1.0000 (0.9463)  acc_ref0: 1.0000 (0.9402)  acc_ref1: 1.0000 (0.9407)  acc_ref2: 1.0000 (0.9404)  time: 1.6858 (1.6579)  data: 0.0113 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0071
+2024-01-03 16:02:43,031 wetectron.trainer INFO: eta: 0:00:00  iter: 2000  loss: 0.5751 (0.7454)  loss_img: 0.0069 (0.1124)  loss_ref_cls0: 0.0341 (0.0165)  loss_ref_cls1: 0.0677 (0.0921)  loss_ref_cls2: 0.2024 (0.2339)  loss_ref_reg0: 0.0187 (0.0084)  loss_ref_reg1: 0.0785 (0.1173)  loss_ref_reg2: 0.1366 (0.1647)  acc_img: 1.0000 (0.9467)  acc_ref0: 1.0000 (0.9401)  acc_ref1: 1.0000 (0.9406)  acc_ref2: 1.0000 (0.9404)  time: 1.7099 (1.6580)  data: 0.0106 (0.0379)  lr: 0.001000  lr_cdb: 0.000100  max mem: 7122  loss_cdb: -0.0040
+2024-01-03 16:02:49,962 wetectron.trainer INFO: Total training time: 0:55:23.371098 (1.6617 s / it)
+2024-01-03 16:02:50,570 wetectron.inference INFO: Start evaluation on ceymo_test dataset(788 images).
+2024-01-03 16:07:37,658 wetectron.inference INFO: Total run time: 0:04:47.087976 (1.4572993728715151 s / img per device, on 4 devices)
+2024-01-03 16:07:37,659 wetectron.inference INFO: Model inference time: 0:04:29.401699 (1.367521316266907 s / img per device, on 4 devices)

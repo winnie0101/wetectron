@@ -24,8 +24,7 @@ def do_ceymo_evaluation(dataset, predictions, output_folder, logger):
     result = eval_detection_ceymo(
         pred_boxlists=pred_boxlists,
         gt_boxlists=gt_boxlists,
-        iou_thresh=0.5,
-        use_07_metric=True,
+        iou_thresh=0.5
     )
     
     result_str = "mAP: {:.4f}\n".format(result["map"])
@@ -42,7 +41,7 @@ def do_ceymo_evaluation(dataset, predictions, output_folder, logger):
     return result
 
 
-def eval_detection_ceymo(pred_boxlists, gt_boxlists, iou_thresh=0.5, use_07_metric=False):
+def eval_detection_ceymo(pred_boxlists, gt_boxlists, iou_thresh=0.5):
     """Evaluate on voc dataset.
     Args:
         pred_boxlists(list[BoxList]): pred boxlist, has labels and scores fields.
@@ -58,7 +57,7 @@ def eval_detection_ceymo(pred_boxlists, gt_boxlists, iou_thresh=0.5, use_07_metr
     prec, rec = calc_detection_ceymo_prec_rec(
         pred_boxlists=pred_boxlists, gt_boxlists=gt_boxlists, iou_thresh=iou_thresh
     )
-    ap = calc_detection_ceymo_ap(prec, rec, use_07_metric=use_07_metric)
+    ap = calc_detection_ceymo_ap(prec, rec)
     return {"ap": ap, "map": np.nanmean(ap)}
 
 def calc_detection_ceymo_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
@@ -153,7 +152,7 @@ def calc_detection_ceymo_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
     return prec, rec
 
 
-def calc_detection_ceymo_ap(prec, rec, use_07_metric=False):
+def calc_detection_ceymo_ap(prec, rec):
     """Calculate average precisions based on evaluation code of PASCAL VOC.
     This function calculates average precisions
     from given precisions and recalls.
@@ -167,9 +166,6 @@ def calc_detection_ceymo_ap(prec, rec, use_07_metric=False):
             :obj:`rec[l]` indicates recall for class :math:`l`.
             If :obj:`rec[l]` is :obj:`None`, this function returns
             :obj:`numpy.nan` for class :math:`l`.
-        use_07_metric (bool): Whether to use PASCAL VOC 2007 evaluation metric
-            for calculating average precision. The default value is
-            :obj:`False`.
     Returns:
         ~numpy.ndarray:
         This function returns an array of average precisions.
@@ -185,28 +181,18 @@ def calc_detection_ceymo_ap(prec, rec, use_07_metric=False):
             ap[l] = np.nan
             continue
 
-        if use_07_metric:
-            # 11 point metric
-            ap[l] = 0
-            for t in np.arange(0.0, 1.1, 0.1):
-                if np.sum(rec[l] >= t) == 0:
-                    p = 0
-                else:
-                    p = np.max(np.nan_to_num(prec[l])[rec[l] >= t])
-                ap[l] += p / 11
-        else:
-            # correct AP calculation
-            # first append sentinel values at the end
-            mpre = np.concatenate(([0], np.nan_to_num(prec[l]), [0]))
-            mrec = np.concatenate(([0], rec[l], [1]))
+        # correct AP calculation
+        # first append sentinel values at the end
+        mpre = np.concatenate(([0], np.nan_to_num(prec[l]), [0]))
+        mrec = np.concatenate(([0], rec[l], [1]))
 
-            mpre = np.maximum.accumulate(mpre[::-1])[::-1]
+        mpre = np.maximum.accumulate(mpre[::-1])[::-1]
 
-            # to calculate area under PR curve, look for points
-            # where X axis (recall) changes value
-            i = np.where(mrec[1:] != mrec[:-1])[0]
+        # to calculate area under PR curve, look for points
+        # where X axis (recall) changes value
+        i = np.where(mrec[1:] != mrec[:-1])[0]
 
-            # and sum (\Delta recall) * prec
-            ap[l] = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
+        # and sum (\Delta recall) * prec
+        ap[l] = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
 
     return ap

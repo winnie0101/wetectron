@@ -42,3 +42,5 @@ log/
 
 # MacOS
 .DS_Store
+
+.result_on_server/
