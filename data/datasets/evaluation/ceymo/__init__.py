@@ -13,3 +13,5 @@ def ceymo_evaluation(dataset, predictions, output_folder, box_only, task='det', 
             output_folder=output_folder,
             logger=logger,
         )
+    else:
+        raise ValueError

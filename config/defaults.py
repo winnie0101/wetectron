@@ -528,7 +528,7 @@ _C.TEST.BBOX_AUG.MAX_SIZE = 4000
 _C.TEST.BBOX_AUG.SCALE_H_FLIP = False
 
 # visualization threshold
-_C.TEST.VIS_THRES = 0.5
+_C.TEST.VIS_THRES = 0.4
 
 # ---------------------------------------------------------------------------- #
 # Misc options

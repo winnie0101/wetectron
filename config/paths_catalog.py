@@ -92,12 +92,12 @@ class DatasetCatalog(object):
             # PASCAL VOC2012 doesn't made the test annotations available, so there's no json annotation
         },
         "ceymo_train": {
-            "data_dir": "ceymo/Ceymo/train",
-            "split": "train_list2"
+            "data_dir": "ceymo/CeyMo/train",
+            "split": "train_list_junction_box"
         },
         "ceymo_test": {
-            "data_dir": "ceymo/Ceymo/test",
-            "split": "test_list2"
+            "data_dir": "ceymo/CeyMo/test",
+            "split": "test_list_junction_box"
         },
         "cityscapes_fine_instanceonly_seg_train_cocostyle": {
             "img_dir": "cityscapes/images",

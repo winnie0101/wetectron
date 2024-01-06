@@ -28,7 +28,8 @@ VOC_CATEGORIES = ["__background",
     "horse","motorbike","person","pottedplant","sheep","sofa","train","tvmonitor"]
 
 # CEYMO_CATEGORIES = ["__background", "no jb", "jb"]
-CEYMO_CATEGORIES = ["no jb", "jb"]
+# CEYMO_CATEGORIES = ["no jb", "jb"]
+CEYMO_CATEGORIES = ["__background", "jb"]
 
 
 def compute_colors_for_labels(labels):
@@ -141,13 +142,13 @@ def overlay_class_names(image, predictions, CATEGORIES):
     boxes = predictions.bbox
     template = "{}: {:.2f}"
     for box, score, label in zip(boxes, scores, labels):
-        x, y = box[:2]
+        x, y = box[2:]
         s = template.format(label, score)
         text_size, _ = cv2.getTextSize(s, cv2.FONT_HERSHEY_SIMPLEX, .5, 1)
         text_w, text_h = text_size
-        cv2.rectangle(image, (int(x), int(y)), (int(x) + text_w, int(y) - text_h), (0, 0, 0), -1)
+        cv2.rectangle(image, (int(x), int(y)), (int(x) - text_w, int(y) + text_h), (0, 0, 0), -1)
         cv2.putText(
-            image, s, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 255, 255), 1
+            image, s, (int(x) - text_w, int(y) + text_h), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 255, 255), 1
         )
     return image
 
@@ -162,9 +163,9 @@ def vis_results(
     confidence_threshold = cfg.TEST.VIS_THRES
     mask_threshold = -1 if show_mask_heatmaps else 0.5
     masker = Masker(threshold=mask_threshold, padding=1)
-    
     for prediction, img_info in zip(predictions, img_infos):
         img_name = img_info['file_name']
+        # print(img_name)
         image = cv2.imread(os.path.join(data_path, img_name))
         width, height = img_info['width'], img_info['height']
         assert image.shape[0] == height and image.shape[1] == width
@@ -179,6 +180,7 @@ def vis_results(
             
         # select only prediction which have a `score` > confidence_threshold
         scores = prediction.get_field("scores")
+        # print("scores: ", scores)
         keep = torch.nonzero(scores > confidence_threshold, as_tuple=False).squeeze(1)
         prediction = prediction[keep]
         # prediction in descending order of score

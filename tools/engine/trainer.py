@@ -203,9 +203,6 @@ def do_train_cdb(
 
         # forward pass and compute loss
         loss_dict, metrics = model(images, targets, rois, model_cdb)
-        print("loss_dict: ", loss_dict)
-        print("metrics: ", metrics)
-        exit()
         losses = sum(loss for loss in loss_dict.values())
         # reduce losses over all GPUs for logging purposes
         loss_dict_reduced = reduce_loss_dict(loss_dict)

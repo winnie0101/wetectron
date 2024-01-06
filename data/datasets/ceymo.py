@@ -10,12 +10,15 @@ from utils.bounding_box import BoxList
 from utils.boxlist_ops import remove_small_boxes
 from .coco import unique_boxes
 
+import cv2
+import numpy as np
+
 class CeyMoDataset(torch.utils.data.Dataset):
 
     CLASSES = (
-        # "__background__ ",
-        "no jb", # no Junction Box
-        "jb" # Junction Box
+        "__background__ ",
+        # "no jb", # no Junction Box
+        "jb", # Junction Box
     )
 
     def __init__(self, data_dir, split, use_difficult=False, transforms=None, proposal_file=None):
@@ -78,13 +81,30 @@ class CeyMoDataset(torch.utils.data.Dataset):
             keep = unique_boxes(rois)
             rois = rois[keep, :]
             # scores = scores[keep]
-            rois = BoxList(torch.tensor(rois), img.size, mode="xyxy")
+            rois = BoxList(torch.tensor(rois), img.size, mode="xywh")
+            rois = rois.convert("xyxy")
             rois = rois.clip_to_image(remove_empty=True)
             # TODO: deal with scores
-            rois = remove_small_boxes(boxlist=rois, min_size=2)
+            # print("===",len(rois))
+            width, height = img.size
+            rois = remove_small_boxes(boxlist=rois, ws_min_size=width*0.1 ,hs_min_size=height*0.1)
             if self.top_k > 0:
                 rois = rois[[range(self.top_k)]]
                 # scores = scores[:self.top_k]
+
+            # print("=====",len(rois))
+            # if rois is not None:
+            #     img_draw = img.copy()
+            #     img_draw_np = np.array(img_draw)
+            #     for box in rois.bbox:
+            #         x, y, w, h = box.tolist()
+            #         cv2.rectangle(img_draw_np, (int(x), int(y)), (int(x+w), int(y+h)), (0, 255, 0), 2)  # BGR color format
+
+            #     # Display the image
+            #     # cv2.imshow("Image with ROIs", img_draw_np)
+            #     # cv2.waitKey(0)
+            #     # cv2.destroyAllWindows()
+            #     cv2.imwrite(roi_idx, img_draw_np)
         else:
             rois = None
 
@@ -130,17 +150,15 @@ class CeyMoDataset(torch.utils.data.Dataset):
                     bb.find("ymax").text,
                 ]
                 bndbox = tuple(map(int, box))
-
                 boxes.append(bndbox)
-
-            difficult_boxes.append(difficult)
+                difficult_boxes.append(difficult)
 
         if len(boxes) == 0: # if this image has no Junction Box
             gt_classes.append(0)
             box=[0, 0, 0, 0]
             bndbox = tuple(map(int, box))
             boxes.append(bndbox)
-            difficult_boxes.append(0)
+            difficult_boxes.append(False)
 
         size = target.find("size")
         im_info = tuple(map(int, (size.find("height").text, size.find("width").text)))

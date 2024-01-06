@@ -29,6 +29,7 @@ def do_ceymo_evaluation(dataset, predictions, output_folder, logger):
     
     result_str = "mAP: {:.4f}\n".format(result["map"])
     for i, ap in enumerate(result["ap"]):
+        # One class no need
         if i == 0:  # skip background
             continue
         result_str += "{:<16}: {:.4f}\n".format(
@@ -94,6 +95,7 @@ def calc_detection_ceymo_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
             n_pos[l] += np.logical_not(gt_difficult_l).sum()
             score[l].extend(pred_score_l)
 
+            # One class no need
             if len(pred_bbox_l) == 0:
                 continue
             if len(gt_bbox_l) == 0:
