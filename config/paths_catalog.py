@@ -93,11 +93,11 @@ class DatasetCatalog(object):
         },
         "ceymo_train": {
             "data_dir": "ceymo/CeyMo/train",
-            "split": "train_list_junction_box"
+            "split": "train_list_half"
         },
         "ceymo_test": {
             "data_dir": "ceymo/CeyMo/test",
-            "split": "test_list_junction_box"
+            "split": "test_list_half"
         },
         "cityscapes_fine_instanceonly_seg_train_cocostyle": {
             "img_dir": "cityscapes/images",

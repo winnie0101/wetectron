@@ -73,6 +73,7 @@ class Checkpointer(object):
             self.logger.info("No checkpoint found. Initializing model from scratch")
             return {}
         self.logger.info("Loading checkpoint from {}".format(f))
+        print("Loading checkpoint from {}".format(f))
         checkpoint = self._load_file(f)
         self._load_model(checkpoint)
         if model_only:
@@ -87,8 +88,7 @@ class Checkpointer(object):
             self.logger.info("Loading model_cdb from {}".format(f))
             temp_ckp = checkpoint.pop("model_cdb")
             temp_dict = {k.partition('module.')[2]: v for k,v in temp_ckp.items()}
-            print(self.model_cdb)
-            self.model_cdb.load_state_dict(temp_dict)
+            self.model_cdb.load_state_dict(temp_ckp)
         if "optimizer_cdb" in checkpoint and self.optimizer_cdb:
             self.logger.info("Loading optimizer_cdb from {}".format(f))
             temp_ckp = checkpoint.pop("optimizer_cdb")
@@ -171,3 +171,9 @@ class DetectronCheckpointer(Checkpointer):
         if "model" not in loaded:
             loaded = dict(model=loaded)
         return loaded
+
+    def _load_model(self, checkpoint):
+        state_dict = checkpoint.pop("model")
+        # Add this line to handle 'module.' prefix
+        state_dict = {k if k.startswith('module.') else 'module.' + k: v for k, v in state_dict.items()}
+        load_state_dict(self.model, state_dict)

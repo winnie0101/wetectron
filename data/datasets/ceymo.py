@@ -87,7 +87,9 @@ class CeyMoDataset(torch.utils.data.Dataset):
             # TODO: deal with scores
             # print("===",len(rois))
             width, height = img.size
-            rois = remove_small_boxes(boxlist=rois, ws_min_size=width*0.1 ,hs_min_size=height*0.1)
+            rois = remove_small_boxes(
+                boxlist=rois, ws_min_size=width*0.1 ,hs_min_size=height*0.1, ws_max_size=width*0.9, hs_max_size=height*0.9
+            )
             if self.top_k > 0:
                 rois = rois[[range(self.top_k)]]
                 # scores = scores[:self.top_k]

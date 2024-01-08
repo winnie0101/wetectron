@@ -95,7 +95,6 @@ def calc_detection_ceymo_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
             n_pos[l] += np.logical_not(gt_difficult_l).sum()
             score[l].extend(pred_score_l)
 
-            # One class no need
             if len(pred_bbox_l) == 0:
                 continue
             if len(gt_bbox_l) == 0:
@@ -122,13 +121,19 @@ def calc_detection_ceymo_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
                     if gt_difficult_l[gt_idx]:
                         match[l].append(-1)
                     else:
-                        if not selec[gt_idx]:
+                        # when is background class, it always match
+                        if gt_label[gt_idx] == 0 and pred_label[0] == 0:
+                            match[l].append(1)
+                        elif not selec[gt_idx]:
                             match[l].append(1)
                         else:
                             match[l].append(0)
                     selec[gt_idx] = True
                 else:
-                    match[l].append(0)
+                    if gt_label[gt_idx] == 0 and pred_label[0] == 0:
+                        match[l].append(1)
+                    else:
+                        match[l].append(0)
 
     n_fg_class = max(n_pos.keys()) + 1
     prec = [None] * n_fg_class

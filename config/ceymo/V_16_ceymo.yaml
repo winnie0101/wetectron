@@ -1,5 +1,6 @@
 MODEL:
   META_ARCHITECTURE: "GeneralizedRCNN"
+  # WEIGHT: "output/ceymo_2000_2class_batch4/model_0002000.pth"
   WEIGHT: "catalog://VGGImageNetPretrained/JCJOHNS/VGG-16" 
   BACKBONE:
     CONV_BODY: "VGG16-OICR"
@@ -25,7 +26,8 @@ DATASETS:
   TRAIN: ("ceymo_train",)
   TEST: ("ceymo_test",)
 PROPOSAL_FILES:
-  TRAIN: ('proposal/SS-ceymo_train_junction_box-boxes.pkl',)
+  # TRAIN: ('proposal/SS-ceymo_train_junction_box-boxes.pkl',)
+  TRAIN: ('proposal/SS-ceymo_train-boxes.pkl',) 
   TEST:  ('proposal/SS-ceymo_test-boxes.pkl',)
 DATALOADER:
   SIZE_DIVISIBILITY: 32
@@ -35,13 +37,13 @@ INPUT:
   MIN_SIZE_TEST: 800
   MAX_SIZE_TEST: 2000
 SOLVER:
-  IMS_PER_BATCH: 8 #8
+  IMS_PER_BATCH: 4 #8
   BASE_LR: 0.0001 #0.01
   WEIGHT_DECAY: 0.0001
-  WARMUP_ITERS: 500 #200
+  WARMUP_ITERS: 200 #200
   STEPS: (20000, 26700) #(20000, 26700)
-  MAX_ITER: 500 # 30000
-  CHECKPOINT_PERIOD: 500 #1000
+  MAX_ITER: 4000 # 30000
+  CHECKPOINT_PERIOD: 200 #1000
 SOLVER_CDB:
   BASE_LR: 0.0001
   GAMMA: 3.0
