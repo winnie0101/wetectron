@@ -96,6 +96,8 @@ class DatasetCatalog(object):
             "split": "train_list_half"
         },
         "ceymo_test": {
+            # "data_dir": "jb_video/jb13-1",
+            # "split": "jb13-1"
             "data_dir": "ceymo/CeyMo/test",
             "split": "test_list_half"
         },

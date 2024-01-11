@@ -54,7 +54,7 @@ def overlay_boxes(image, predictions):
         box = box.to(torch.int64)
         top_left, bottom_right = box[:2].tolist(), box[2:].tolist()
         image = cv2.rectangle(
-            image, tuple(top_left), tuple(bottom_right), tuple(color), 2
+            image, tuple(top_left), tuple(bottom_right), (0, 255, 0), 2
         )
     return image
 
@@ -202,7 +202,7 @@ def vis_results(
                 CATEGORIES = COCO_CATEGORIES
             elif 'voc' in data_path:
                 CATEGORIES = VOC_CATEGORIES
-            elif 'ceymo' in data_path:
+            elif 'ceymo' in data_path or 'jb' in data_path:
                 CATEGORIES = CEYMO_CATEGORIES
             else:
                 raise ValueError

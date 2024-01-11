@@ -69,6 +69,7 @@ class CeyMoDataset(torch.utils.data.Dataset):
             target = target.clip_to_image(remove_empty=True)
                 
         if self.proposals is not None:
+            # print("self.proposals", self.proposals)
             if '_' in self.ids[index] and self.image_set == "test" and "2012" in self.root :
                 img_id = self.ids[index].split('_')[1]
             else:
