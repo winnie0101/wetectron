@@ -7,7 +7,7 @@ from PIL import Image
 import xml.etree.ElementTree as ET
 
 from utils.bounding_box import BoxList
-from utils.boxlist_ops import remove_small_boxes
+from utils.boxlist_ops import remove_small_boxes_for_ceymo
 from .coco import unique_boxes
 
 import cv2
@@ -66,7 +66,7 @@ class CeyMoDataset(torch.utils.data.Dataset):
             target = None
         else:
             target = self.get_groundtruth(index)
-            target = target.clip_to_image(remove_empty=True)
+            target = target.clip_to_image(remove_empty=False)
                 
         if self.proposals is not None:
             # print("self.proposals", self.proposals)
@@ -88,7 +88,7 @@ class CeyMoDataset(torch.utils.data.Dataset):
             # TODO: deal with scores
             # print("===",len(rois))
             width, height = img.size
-            rois = remove_small_boxes(
+            rois = remove_small_boxes_for_ceymo(
                 boxlist=rois, ws_min_size=width*0.1 ,hs_min_size=height*0.1, ws_max_size=width*0.9, hs_max_size=height*0.9
             )
             if self.top_k > 0:

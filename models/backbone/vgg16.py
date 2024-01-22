@@ -9,6 +9,7 @@ from collections import OrderedDict
 import torch.nn as nn
 from utils import registry
 from utils.poolers import Pooler
+from models.non_local import Self_Attn
 
 
 # to auto-load imagenet pre-trainied weights
@@ -34,6 +35,7 @@ class VGG_Base(nn.Module):
             nn.Conv2d(128, 128, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
+            Self_Attn(128),
 
             nn.Conv2d(128, 256, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
@@ -42,6 +44,7 @@ class VGG_Base(nn.Module):
             nn.Conv2d(256, 256, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
+            # Self_Attn(256),
 
             nn.Conv2d(256, 512, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
@@ -50,12 +53,14 @@ class VGG_Base(nn.Module):
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.Identity(),
+            # Self_Attn(512),
             
             nn.Conv2d(512, 512, kernel_size=3, padding=2, dilation=2),
             nn.ReLU(inplace=True),
             nn.Conv2d(512, 512, kernel_size=3, padding=2, dilation=2),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, padding=2, dilation=2)
+            nn.Conv2d(512, 512, kernel_size=3, padding=2, dilation=2),
+            # Self_Attn(512),
         )
         if init_weights:
             self._initialize_weights()

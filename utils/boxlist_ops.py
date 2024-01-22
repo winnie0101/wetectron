@@ -67,8 +67,7 @@ def boxlist_nms(boxlist, nms_thresh, max_proposals=-1, score_field="scores"):
 #     boxlist = boxlist[keep]
 #     return boxlist.convert(mode)
 
-
-def remove_small_boxes(boxlist, ws_min_size, hs_min_size, ws_max_size, hs_max_size):
+def remove_small_boxes_for_ceymo(boxlist, ws_min_size, hs_min_size, ws_max_size, hs_max_size):
     """
     Only keep boxes with both sides >= min_size
 
@@ -80,11 +79,27 @@ def remove_small_boxes(boxlist, ws_min_size, hs_min_size, ws_max_size, hs_max_si
     xywh_boxes = boxlist.convert("xywh").bbox
     _, _, ws, hs = xywh_boxes.unbind(dim=1)
     # print(ws, hs)
-    # keep = (
-    #     (ws >= min_size) & (hs >= min_size)
-    # ).nonzero().squeeze(1)
     ## https://github.com/pytorch/vision/pull/2314
     keep = (ws >= ws_min_size) & (hs >= hs_min_size) & (ws <= ws_max_size) & (hs <= hs_max_size)
+    keep = torch.stack(torch.where(keep > 0), dim=1).squeeze(1)
+    return boxlist[keep]
+
+def remove_small_boxes(boxlist, min_size):
+    """
+    Only keep boxes with both sides >= min_size
+
+    Arguments:
+        boxlist (Boxlist)
+        min_size (int)
+    """
+    # TODO maybe add an API for querying the ws / hs
+    xywh_boxes = boxlist.convert("xywh").bbox
+    _, _, ws, hs = xywh_boxes.unbind(dim=1)
+    # print(ws, hs)
+    keep = (
+        (ws >= min_size) & (hs >= min_size)
+    ).nonzero().squeeze(1)
+    ## https://github.com/pytorch/vision/pull/2314
     keep = torch.stack(torch.where(keep > 0), dim=1).squeeze(1)
     return boxlist[keep]
 

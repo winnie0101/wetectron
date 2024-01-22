@@ -43,3 +43,5 @@ result_on_server/
 
 # MacOS
 .DS_Store
+
+*.mp4

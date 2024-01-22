@@ -111,7 +111,7 @@ def train_cdb(cfg, local_rank, distributed, use_tensorboard=False):
             broadcast_buffers=False, find_unused_parameters=True,
         )
 
-    arguments = {"iteration": 1201}
+    arguments = {"iteration": 0}
     output_dir = cfg.OUTPUT_DIR
     save_to_disk = get_rank() == 0
     checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
