@@ -8,6 +8,7 @@ import logging
 import torch
 
 from utils.imports import import_file
+from config import cfg
 
 
 def align_and_update_state_dicts(model_state_dict, loaded_state_dict):
@@ -71,12 +72,51 @@ def strip_prefix_if_present(state_dict, prefix):
     return stripped_state_dict
 
 
-def load_state_dict(model, loaded_state_dict):
+def update_layer_number_for_non_local(model_state_dict, state_dict):
+
+    new_state_dict = OrderedDict()
+    for key in list(state_dict.keys()):
+        layer_num = int(key.split('.')[1])
+        layer_group = key.split('.')[0]
+        layer_type = key.split('.')[-1]
+
+        if layer_num >= 10:
+            layer_num = layer_num + 1
+        if layer_num >= 17:
+            layer_num = layer_num + 1
+        if layer_num >= 24:
+            layer_num = layer_num + 1
+            
+        if layer_group != "features":
+            break
+
+        if list(model_state_dict.keys())[0].startswith("module."):
+            # If it starts with "module.", use the full module path
+            _key ='module.backbone.body.' + layer_group + '.' + str(layer_num) + '.' + layer_type
+        else:
+            # If it doesn't start with "module.", use a simplified path
+            _key ='backbone.body.' + layer_group + '.' + str(layer_num) + '.' + layer_type
+            
+        if layer_type == 'weight':
+            assert model_state_dict[_key].size() == state_dict[key].size(), "size error!"
+        else: # layer type == 'bias'
+            assert model_state_dict[_key].size() == state_dict[key].size(), "size error!"
+
+        new_key = layer_group + '.' + str(layer_num) + '.' + layer_type
+        new_state_dict[new_key] = state_dict[key]
+
+    # print("new Loaded State Dict Keys:", new_state_dict.keys())
+    return new_state_dict
+    
+
+def load_state_dict(model, loaded_state_dict, load_imgnet_pretrained=False):
     model_state_dict = model.state_dict()
     # if the state_dict comes from a model that was wrapped in a
     # DataParallel or DistributedDataParallel during serialization,
     # remove the "module" prefix before performing the matching
     loaded_state_dict = strip_prefix_if_present(loaded_state_dict, prefix="module.")
+    if load_imgnet_pretrained and cfg.MODEL.NON_LOCAL:
+        loaded_state_dict = update_layer_number_for_non_local(model_state_dict, loaded_state_dict)
     align_and_update_state_dicts(model_state_dict, loaded_state_dict)
 
     # use strict loading

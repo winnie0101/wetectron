@@ -75,7 +75,11 @@ class Checkpointer(object):
         self.logger.info("Loading checkpoint from {}".format(f))
         print("Loading checkpoint from {}".format(f))
         checkpoint = self._load_file(f)
-        self._load_model(checkpoint)
+        if f.startswith("catalog://"):
+            self._load_imgnet_pretrained_model(checkpoint)
+        else:
+            self._load_model(checkpoint)
+            
         if model_only:
             return checkpoint
         if "optimizer" in checkpoint and self.optimizer:
@@ -129,6 +133,9 @@ class Checkpointer(object):
 
     def _load_model(self, checkpoint):
         load_state_dict(self.model, checkpoint.pop("model"))
+
+    def _load_imgnet_pretrained_model(self, checkpoint):
+        load_state_dict(self.model, checkpoint.pop("model"), load_imgnet_pretrained=True)
 
 
 class DetectronCheckpointer(Checkpointer):

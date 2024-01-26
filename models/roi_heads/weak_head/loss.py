@@ -231,7 +231,7 @@ class RoIRegLossComputation(object):
         
         device = class_score.device
         num_classes = class_score.shape[1]
-        
+
         final_score = class_score * final_det_score
         final_score_list = final_score.split([len(p) for p in proposals])
         ref_scores = [rs.split([len(p) for p in proposals]) for rs in ref_scores]

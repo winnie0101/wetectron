@@ -1,3 +1,20 @@
 python -m torch.distributed.launch --nproc_per_node=2 tools/train_net.py --config-file "config/ceymo/V_16_ceymo.yaml" --use-tensorboard --skip-test OUTPUT_DIR output/ceymo_200_2class
 
-python -m torch.distributed.launch --nproc_per_node=2 tools/test_net.py --config-file "config/ceymo/V_16_ceymo.yaml" --vis  TEST.IMS_PER_BATCH 4 OUTPUT_DIR output/ceymo_2000_2class_batch4/jb02 MODEL.WEIGHT output/ceymo_2000_2class_batch4/model_final.pth
+python -m torch.distributed.launch --nproc_per_node=2 tools/test_net.py --config-file "config/ceymo/V_16_ceymo.yaml" --vis  TEST.IMS_PER_BATCH 4 OUTPUT_DIR output/ceymo MODEL.WEIGHT output/ceymo/model_final.pth
+
+
+
+
+pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
+
+
+python tools/test_net.py --config-file "configs/voc/V_16_voc07.yaml" TEST.IMS_PER_BATCH 4 OUTPUT_DIR output MODEL.WEIGHT pretrained/voc07_vgg16.pth
+python -m torch.distributed.launch --nproc_per_node=2 tools/test_net.py --config-file "config/voc/V_16_voc07.yaml" --vis TEST.IMS_PER_BATCH 8 OUTPUT_DIR output MODEL.WEIGHT pretrained/voc07_vgg16.pth
+
+python -m torch.distributed.launch --nproc_per_node=1 tools/test_net.py --config-file "config/voc/V_16_voc07.yaml" --vis TEST.IMS_PER_BATCH 4 OUTPUT_DIR output MODEL.WEIGHT pretrained/voc07_vgg16.pth
+
+
+train:
+python -m torch.distributed.launch --nproc_per_node=2 tools/train_net.py --config-file "config/voc/V_16_voc07.yaml" --use-tensorboard OUTPUT_DIR output
+
+python -m torch.distributed.launch --nproc_per_node=2 tools/train_net.py --config-file "config/ceymo/V_16_ceymo.yaml" --use-tensorboard OUTPUT_DIR output

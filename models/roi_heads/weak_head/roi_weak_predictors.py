@@ -98,7 +98,6 @@ class OICRPredictor(nn.Module):
                 det_logit_per_image = F.softmax(det_logit_per_image, dim=0)
                 final_det_logit.append(det_logit_per_image)
             final_det_logit = torch.cat(final_det_logit, dim=0)
-            # 
             ref1_logit = F.softmax(ref1_logit, dim=1)
             ref2_logit = F.softmax(ref2_logit, dim=1)
             ref3_logit = F.softmax(ref3_logit, dim=1)
@@ -144,7 +143,7 @@ class MISTPredictor(nn.Module):
             x = self.avgpool(x)
             x = x.view(x.size(0), -1)
         assert x.dim() == 2
-        
+
         cls_logit = self.cls_score(x)
         det_logit = self.det_score(x) 
         ref1_logit = self.ref1(x)
