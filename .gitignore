@@ -19,6 +19,7 @@ configs/weak_old
 configs/voc_ignore
 log/
 result_on_server/
+wandb/
 
 # pytorch/python/numpy formats
 *.pth
