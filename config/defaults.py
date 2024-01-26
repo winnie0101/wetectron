@@ -29,7 +29,7 @@ _C.MODEL.KEYPOINT_ON = False
 _C.MODEL.DEVICE = "cuda"
 _C.MODEL.META_ARCHITECTURE = "GeneralizedRCNN"
 _C.MODEL.CLS_AGNOSTIC_BBOX_REG = False
-_C.MODEL.NON_LOCAL = True
+_C.MODEL.NON_LOCAL = False
 
 # The meaning of FASTER_RCNN depends on the context (training vs. inference):
 # 1) During training, FASTER_RCNN = True means that end-to-end training will be

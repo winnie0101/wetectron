@@ -15,6 +15,7 @@ from utils.env import setup_environment  # noqa F401 isort:skip
 import argparse
 import warnings
 import torch
+import wandb
 from config import cfg
 from data.build import make_data_loader
 from solver import make_lr_scheduler, make_lr_cdb_scheduler
@@ -24,14 +25,23 @@ from tools.engine.trainer import do_train, do_train_cdb
 from models.generalized_rcnn import GeneralizedRCNN
 from utils.checkpoint import DetectronCheckpointer
 from utils.collect_env import collect_env_info
-from utils.distributed import synchronize, get_rank
+from utils.distributed import synchronize, get_rank, is_main_process
 from utils.logger import setup_logger
 from utils.miscellaneous import mkdir, save_config, seed_all_rng
-from utils.metric_logger import (MetricLogger, TensorboardLogger)
+from utils.metric_logger import (MetricLogger, WandbLogger)
 from models.cdb import ConvConcreteDB
 
 
-def train(cfg, local_rank, distributed, use_tensorboard=False):
+def setup_wandb(cfg):
+    if is_main_process():
+        wandb.init(project="wetectron", 
+                   config=cfg
+                )
+        return wandb
+    else:
+        return None
+
+def train(cfg, local_rank, distributed, use_wandb=False):
     model = GeneralizedRCNN(cfg)
     device = torch.device(cfg.MODEL.DEVICE)
     model.to(device)
@@ -61,11 +71,14 @@ def train(cfg, local_rank, distributed, use_tensorboard=False):
         start_iter=arguments["iteration"],
     )
 
-    if use_tensorboard:
-        meters = TensorboardLogger(
-            log_dir=os.path.join(cfg['OUTPUT_DIR'], 'log/'),
-            start_iter=arguments['iteration'],
-            delimiter="  ")
+    if use_wandb:
+        wandb = setup_wandb(cfg)
+        if wandb is not None:
+            print("wandb is not None")
+            wandb_logger = WandbLogger(wandb, start_iter=arguments['iteration'], delimiter="  ")
+            meters = wandb_logger
+        else:
+            meters = MetricLogger(delimiter="  ")
     else:
         meters = MetricLogger(delimiter="  ")
         
@@ -81,10 +94,12 @@ def train(cfg, local_rank, distributed, use_tensorboard=False):
         meters
     )
 
+    if use_wandb and wandb is not None:
+        wandb.finish()
     return model
 
 
-def train_cdb(cfg, local_rank, distributed, use_tensorboard=False):
+def train_cdb(cfg, local_rank, distributed, use_tensorboard=False, use_wandb=False):
     device = torch.device(cfg.MODEL.DEVICE)
 
     model = GeneralizedRCNN(cfg)
@@ -131,11 +146,14 @@ def train_cdb(cfg, local_rank, distributed, use_tensorboard=False):
         start_iter=arguments["iteration"],
     )
     
-    if use_tensorboard:
-        meters = TensorboardLogger(
-            log_dir=os.path.join(cfg['OUTPUT_DIR'], 'log/'),
-            start_iter=arguments['iteration'],
-            delimiter="  ")
+    if use_wandb:
+        wandb = setup_wandb(cfg)
+        if wandb is not None:
+            wandb_logger = WandbLogger(wandb, start_iter=arguments['iteration'], delimiter="  ")
+            meters = wandb_logger
+        else:
+            print("wandb is None")
+            meters = MetricLogger(delimiter="  ")
     else:
         meters = MetricLogger(delimiter="  ")
 
@@ -152,6 +170,8 @@ def train_cdb(cfg, local_rank, distributed, use_tensorboard=False):
         cfg
     )
 
+    if use_wandb and wandb is not None:
+        wandb.finish()
     return model
 
 
@@ -205,9 +225,9 @@ def main():
         nargs=argparse.REMAINDER,
     )
     parser.add_argument(
-        "--use-tensorboard",
-        dest="use_tensorboard",
-        help="Use tensorboardX logger (Requires tensorboardX installed)",
+        "--use-wandb",
+        dest="use_wandb",
+        help="Use weight&bias logger (Requires wandb installed)",
         action="store_true",
     )
 
@@ -258,14 +278,14 @@ def main():
             cfg=cfg,
             local_rank=args.local_rank,
             distributed=args.distributed,
-            use_tensorboard=args.use_tensorboard
+            use_wandb=args.use_wandb
         )
     else:
         model = train(
             cfg=cfg,
             local_rank=args.local_rank,
             distributed=args.distributed,
-            use_tensorboard=args.use_tensorboard
+            use_wandb=args.use_wandb
         )
 
     if not args.skip_test:

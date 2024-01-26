@@ -5,12 +5,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 from collections import defaultdict
 from collections import deque
-import time
-from datetime import datetime
 import torch
-
-from .distributed import is_main_process
-
 
 class SmoothedValue(object):
     """Track a series of values and provide access to smoothed values over a
@@ -71,42 +66,20 @@ class MetricLogger(object):
                 "{}: {:.4f} ({:.4f})".format(name, meter.median, meter.global_avg)
             )
         return self.delimiter.join(loss_str)
-    
-    
-class TensorboardLogger(MetricLogger):
+
+
+class WandbLogger(MetricLogger):
     def __init__(self,
-                 log_dir,
+                 wandb,
                  start_iter=0,
                  delimiter='\t'):
 
-        super(TensorboardLogger, self).__init__(delimiter)
+        super(WandbLogger, self).__init__(delimiter)
         self.iteration = start_iter
-        self.writer = self._get_tensorboard_writer(log_dir)
-
-    @staticmethod
-    def _get_tensorboard_writer(log_dir):
-        try:
-            from tensorboardX import SummaryWriter
-        except ImportError:
-            raise ImportError(
-                'To use tensorboard please install tensorboardX '
-                '[ pip install tensorflow tensorboardX ].'
-            )
-
-        if is_main_process():
-            timestamp = datetime.fromtimestamp(time.time()).strftime('%Y%m%d-%H:%M')
-            tb_logger = SummaryWriter('{}{}'.format(log_dir, timestamp))
-            return tb_logger
-        else:
-            return None
+        self.wandb = wandb
 
     def update(self, iteration=None, ** kwargs):
-        super(TensorboardLogger, self).update(**kwargs)
+        super(WandbLogger, self).update(**kwargs)
         self.iteration = iteration
-        if self.writer:
-            for k, v in kwargs.items():
-                if isinstance(v, torch.Tensor):
-                    v = v.item()
-                assert isinstance(v, (float, int))
-                print(k, v, self.iteration)
-                self.writer.add_scalar(k, v, self.iteration)
+        if self.wandb:
+            self.wandb.log(kwargs, step=self.iteration)
