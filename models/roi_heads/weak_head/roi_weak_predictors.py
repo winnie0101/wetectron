@@ -118,17 +118,32 @@ class MISTPredictor(nn.Module):
         num_bbox_reg_classes = 2 if config.MODEL.CLS_AGNOSTIC_BBOX_REG else num_classes
         
         self.avgpool = nn.AdaptiveAvgPool2d(1)
-        self.cls_score = nn.Linear(num_inputs, num_classes)
-        self.det_score = nn.Linear(num_inputs, num_classes)
-    
-        self.ref1 = nn.Linear(num_inputs, num_classes)
-        self.bbox_pred1 = nn.Linear(num_inputs, num_bbox_reg_classes * 4)
+        self.config = config
+
+        if config.MODEL.FC_TO_CONV:
+            self.cls_score = nn.Conv2d(num_inputs, num_classes, kernel_size=1)
+            self.det_score = nn.Conv2d(num_inputs, num_classes, kernel_size=1)
+            
+            self.ref1 = nn.Conv2d(num_inputs, num_classes, kernel_size=1)
+            self.bbox_pred1 = nn.Conv2d(num_inputs, num_bbox_reg_classes * 4, kernel_size=1)
+            
+            self.ref2 = nn.Conv2d(num_inputs, num_classes, kernel_size=1)
+            self.bbox_pred2 = nn.Conv2d(num_inputs, num_bbox_reg_classes * 4, kernel_size=1)
+            
+            self.ref3 = nn.Conv2d(num_inputs, num_classes, kernel_size=1)
+            self.bbox_pred3 = nn.Conv2d(num_inputs, num_bbox_reg_classes * 4, kernel_size=1)
+        else:
+            self.cls_score = nn.Linear(num_inputs, num_classes)
+            self.det_score = nn.Linear(num_inputs, num_classes)
         
-        self.ref2 = nn.Linear(num_inputs, num_classes)
-        self.bbox_pred2 = nn.Linear(num_inputs, num_bbox_reg_classes * 4)
-        
-        self.ref3 = nn.Linear(num_inputs, num_classes)
-        self.bbox_pred3 = nn.Linear(num_inputs, num_bbox_reg_classes * 4)
+            self.ref1 = nn.Linear(num_inputs, num_classes)
+            self.bbox_pred1 = nn.Linear(num_inputs, num_bbox_reg_classes * 4)
+            
+            self.ref2 = nn.Linear(num_inputs, num_classes)
+            self.bbox_pred2 = nn.Linear(num_inputs, num_bbox_reg_classes * 4)
+            
+            self.ref3 = nn.Linear(num_inputs, num_classes)
+            self.bbox_pred3 = nn.Linear(num_inputs, num_bbox_reg_classes * 4)
 
         self._initialize_weights()
 
@@ -141,17 +156,29 @@ class MISTPredictor(nn.Module):
     def forward(self, x, proposals):
         if x.dim() == 4:
             x = self.avgpool(x)
-            x = x.view(x.size(0), -1)
-        assert x.dim() == 2
+        
+        if self.config.MODEL.FC_TO_CONV:
+            cls_logit = self.cls_score(x).view(x.size(0), -1)
+            det_logit = self.det_score(x).view(x.size(0), -1)
+            ref1_logit = self.ref1(x).view(x.size(0), -1)
+            bbox_pred1 = self.bbox_pred1(x).view(x.size(0), -1)
+            ref2_logit = self.ref2(x).view(x.size(0), -1)
+            bbox_pred2 = self.bbox_pred2(x).view(x.size(0), -1)   
+            ref3_logit = self.ref3(x).view(x.size(0), -1)
+            bbox_pred3 = self.bbox_pred3(x).view(x.size(0), -1)
+        else:
+            if x.dim() == 4:
+                x = x.view(x.size(0), -1)
+            assert x.dim() == 2
 
-        cls_logit = self.cls_score(x)
-        det_logit = self.det_score(x) 
-        ref1_logit = self.ref1(x)
-        bbox_pred1 = self.bbox_pred1(x)
-        ref2_logit = self.ref2(x)
-        bbox_pred2 = self.bbox_pred2(x)     
-        ref3_logit = self.ref3(x)
-        bbox_pred3 = self.bbox_pred3(x)
+            cls_logit = self.cls_score(x)
+            det_logit = self.det_score(x) 
+            ref1_logit = self.ref1(x)
+            bbox_pred1 = self.bbox_pred1(x)
+            ref2_logit = self.ref2(x)
+            bbox_pred2 = self.bbox_pred2(x)     
+            ref3_logit = self.ref3(x)
+            bbox_pred3 = self.bbox_pred3(x)
         
         if not self.training:
             cls_logit = F.softmax(cls_logit, dim=1)

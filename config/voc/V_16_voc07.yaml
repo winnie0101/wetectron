@@ -1,5 +1,6 @@
 MODEL:
   META_ARCHITECTURE: "GeneralizedRCNN"
+  NON_LOCAL_PRETRAINED_WEIGHT: "pretrained/pretrained_cnn_cub_max_pool_no_relu_100.pth"
   WEIGHT: "catalog://VGGImageNetPretrained/JCJOHNS/VGG-16" 
   BACKBONE:
     CONV_BODY: "VGG16-OICR"
@@ -35,7 +36,7 @@ INPUT:
   MIN_SIZE_TEST: 480 #800
   MAX_SIZE_TEST: 688 #2000
 SOLVER:
-  IMS_PER_BATCH: 4 #8
+  IMS_PER_BATCH: 2 #8
   BASE_LR: 0.0001
   WEIGHT_DECAY: 0.0001
   WARMUP_ITERS: 2 #200

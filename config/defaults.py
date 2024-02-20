@@ -29,7 +29,9 @@ _C.MODEL.KEYPOINT_ON = False
 _C.MODEL.DEVICE = "cuda"
 _C.MODEL.META_ARCHITECTURE = "GeneralizedRCNN"
 _C.MODEL.CLS_AGNOSTIC_BBOX_REG = False
-_C.MODEL.NON_LOCAL = False
+_C.MODEL.NON_LOCAL = True
+_C.MODEL.CAM_ON = True
+_C.MODEL.FC_TO_CONV = False
 
 # The meaning of FASTER_RCNN depends on the context (training vs. inference):
 # 1) During training, FASTER_RCNN = True means that end-to-end training will be
@@ -50,6 +52,7 @@ _C.MODEL.WSOD_ON = False
 # If the WEIGHT starts with a catalog://, like :R-50, the code will look for
 # the path in paths_catalog. Else, it will use it as the specified absolute path
 _C.MODEL.WEIGHT = ""
+_C.MODEL.NON_LOCAL_PRETRAINED_WEIGHT = ""
 
 # -----------------------------------------------------------------------------
 # INPUT

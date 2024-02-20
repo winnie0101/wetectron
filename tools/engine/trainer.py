@@ -150,6 +150,8 @@ def do_train(
         )
     )
 
+def count_parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 def do_train_cdb(
     model,
@@ -177,6 +179,10 @@ def do_train_cdb(
     start_training_time = time.time()
     end = time.time()
 
+    model_parameters = count_parameters(model)
+    print(f"Model has {model_parameters:,} trainable parameters")
+    model_cdb_parameters = count_parameters(model_cdb)
+    print(f"Model CDB has {model_cdb_parameters:,} trainable parameters")
     for iteration, (images, targets, rois, _) in enumerate(data_loader, start_iter):
         if any(len(target) < 1 for target in targets):
             logger.error(f"Iteration={iteration + 1} || Image Ids used for training {_} || targets Length={[len(target) for target in targets]}" )
@@ -202,6 +208,7 @@ def do_train_cdb(
         rois = [r.to(device) if r is not None else None for r in rois]
 
         # forward pass and compute loss
+        print("====model")
         loss_dict, metrics = model(images, targets, rois, model_cdb)
         losses = sum(loss for loss in loss_dict.values())
         # reduce losses over all GPUs for logging purposes
@@ -222,6 +229,7 @@ def do_train_cdb(
         # concrete db
         optimizer.zero_grad()
         optimizer_cdb.zero_grad()
+        print("====CDB")
         loss_dict, metrics = model(images, targets, rois, model_cdb)
         losses_cdb = - float(cfg.DB.WEIGHT) * sum(loss for loss in loss_dict.values())
         losses_cdb.backward()

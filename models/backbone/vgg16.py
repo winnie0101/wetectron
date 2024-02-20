@@ -26,41 +26,41 @@ class VGG_Base(nn.Module):
         if cfg.MODEL.NON_LOCAL:
             self.features = nn.Sequential(
                 nn.Conv2d(3, 64, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.Conv2d(64, 64, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.MaxPool2d(kernel_size=2, stride=2),
     
                 nn.Conv2d(64, 128, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.Conv2d(128, 128, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.MaxPool2d(kernel_size=2, stride=2),
                 Self_Attn(128),
     
                 nn.Conv2d(128, 256, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.Conv2d(256, 256, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.Conv2d(256, 256, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.MaxPool2d(kernel_size=2, stride=2),
                 Self_Attn(256),
     
                 nn.Conv2d(256, 512, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.Conv2d(512, 512, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.Conv2d(512, 512, kernel_size=3, padding=1),
-                nn.ReLU(inplace=True),
+                nn.LeakyReLU(0.2),
                 nn.Identity(),
                 Self_Attn(512),
                 
-                nn.Conv2d(512, 512, kernel_size=3, padding=2, dilation=2),
-                nn.ReLU(inplace=True),
-                nn.Conv2d(512, 512, kernel_size=3, padding=2, dilation=2),
-                nn.ReLU(inplace=True),
-                nn.Conv2d(512, 512, kernel_size=3, padding=2, dilation=2),
+                nn.Conv2d(512, 512, kernel_size=3, padding=1),
+                nn.LeakyReLU(0.2),
+                nn.Conv2d(512, 512, kernel_size=3, padding=1),
+                nn.LeakyReLU(0.2),
+                nn.Conv2d(512, 512, kernel_size=3, padding=1),
                 Self_Attn(512),
             )
         else:
@@ -101,11 +101,15 @@ class VGG_Base(nn.Module):
             )
         if init_weights:
             self._initialize_weights()
-        self._freeze_backbone(cfg.MODEL.BACKBONE.FREEZE_CONV_BODY_AT)
+        self._freeze_backbone(cfg.MODEL.BACKBONE.FREEZE_CONV_BODY_AT, cfg.MODEL.NON_LOCAL)
 
     def forward(self, x):
         x = self.features(x)
+        self.feature_map = x
         return [x]
+    
+    def get_cam(self):
+        return self.feature_map
 
     def _initialize_weights(self):
         for m in self.modules():
@@ -117,11 +121,13 @@ class VGG_Base(nn.Module):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
-    def _freeze_backbone(self, freeze_at):
-        if freeze_at < 0:
+    def _freeze_backbone(self, freeze_at, is_non_local):
+        if freeze_at < 0 or not is_non_local:
             return
+        
         assert freeze_at in [1, 2, 3, 4, 5]
         layer_index = [5, 10, 17, 23, 29]
+
         for layer in range(layer_index[freeze_at - 1]):
             for p in self.features[layer].parameters(): p.requires_grad = False
 
@@ -171,22 +177,32 @@ class VGG16FC67ROIFeatureExtractor(nn.Module):
         resolution = config.MODEL.ROI_BOX_HEAD.POOLER_RESOLUTION
         scales = config.MODEL.ROI_BOX_HEAD.POOLER_SCALES
         sampling_ratio = config.MODEL.ROI_BOX_HEAD.POOLER_SAMPLING_RATIO
-        pooler = Pooler(
+        self.pooler = Pooler(
             output_size=(resolution, resolution),
             scales=scales,
             sampling_ratio=sampling_ratio,
         )
-        self.pooler = pooler
+        self.config = config
 
-        self.classifier =  nn.Sequential(
-            Identity(),
-            nn.Linear(512 * 7 * 7, 4096),
-            nn.ReLU(inplace=True), 
-            nn.Dropout(),
-            nn.Linear(4096, 4096),
-            nn.ReLU(inplace=True), 
-            nn.Dropout()
-        )
+        if config.MODEL.FC_TO_CONV:
+            self.classifier = nn.Sequential(
+                Identity(),
+                nn.AdaptiveAvgPool2d((7, 7)),  # 将特征图大小调整为7x7 [4012, 512, 7, 7]
+                nn.Conv2d(512, 4096, kernel_size=1),  # 使用1x1卷积进行线性变换 [4012, 4096, 7, 7]
+                nn.ReLU(inplace=True),
+                nn.Dropout(),
+                nn.AdaptiveAvgPool2d((1, 1)), 
+            )
+        else:
+            self.classifier =  nn.Sequential(
+                Identity(),
+                nn.Linear(512 * 7 * 7, 4096), #[4012, 4096]
+                nn.ReLU(inplace=True), 
+                nn.Dropout(), 
+                # nn.Linear(4096, 4096),
+                # nn.ReLU(inplace=True), 
+                # nn.Dropout()
+            )
         self.out_channels = 4096
         
         if init_weights:
@@ -210,6 +226,7 @@ class VGG16FC67ROIFeatureExtractor(nn.Module):
         return x
 
     def forward_neck(self, x):
-        x = x.view(x.shape[0], -1)
+        if not self.config.MODEL.FC_TO_CONV:
+            x = x.view(x.shape[0], -1)
         x = self.classifier(x)
         return x

@@ -3,6 +3,7 @@ import logging
 import os
 
 import torch
+import numpy as np
 from tqdm import tqdm
 
 from config import cfg
@@ -27,7 +28,10 @@ def compute_on_dataset(model, data_loader, device, timer=None, vis=False):
                 output = im_detect_bbox_aug(model, images, device, rois)
             else:
                 rois = [r.to(device) if r is not None else None for r in rois]
-                output = model(images.to(device), rois=rois)
+                if cfg.MODEL.CAM_ON:
+                    output, feature_map = model(images.to(device), rois=rois)
+                else:
+                    output = model(images.to(device), rois=rois)
             if timer:
                 if not cfg.MODEL.DEVICE == 'cpu':
                     torch.cuda.synchronize()
@@ -36,7 +40,16 @@ def compute_on_dataset(model, data_loader, device, timer=None, vis=False):
             if vis:
                 data_path = data_loader.dataset.root
                 img_infos = [data_loader.dataset.get_img_info(ind) for ind in image_ids]
-                vis_results(output, img_infos, data_path, show_mask_heatmaps=False)
+                feature_map = model.get_cam()
+                print("feature map: ")
+                print(feature_map.shape)
+                params = list(model.parameters())
+                class_weights = model.roi_heads.predictor.cls_score.weight.data
+                # weight_softmax = np.squeeze(params[-20].clone().detach().cpu().numpy())
+                for name, param in model.named_parameters():
+                    print(name, param.size())
+                # exit()
+                vis_results(output, img_infos, data_path, feature_map, class_weights, show_mask_heatmaps=False)
         results_dict.update(
             {img_id: result for img_id, result in zip(image_ids, output)}
         )

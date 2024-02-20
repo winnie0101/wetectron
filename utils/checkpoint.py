@@ -16,6 +16,7 @@ from utils.model_zoo import cache_url
 class Checkpointer(object):
     def __init__(
         self,
+        cfg,
         model,
         optimizer=None,
         scheduler=None,
@@ -24,8 +25,9 @@ class Checkpointer(object):
         logger=None,
         model_cdb=None,
         optimizer_cdb=None,
-        scheduler_cdb=None
+        scheduler_cdb=None,
     ):
+        self.cfg=cfg
         self.model = model
         self.optimizer = optimizer
         self.scheduler = scheduler
@@ -68,6 +70,9 @@ class Checkpointer(object):
         if self.has_checkpoint() and use_latest:
             # override argument with existing checkpoint
             f = self.get_checkpoint_file()
+        elif self.has_non_local_pretrained():
+            self.logger.info("Loading pretrained model from {}".format(self.cfg.MODEL.NON_LOCAL_PRETRAINED_WEIGHT))
+            f = self.cfg.MODEL.NON_LOCAL_PRETRAINED_WEIGHT
         if not f:
             # no checkpoint could be found
             self.logger.info("No checkpoint found. Initializing model from scratch")
@@ -110,6 +115,12 @@ class Checkpointer(object):
     def has_checkpoint(self):
         save_file = os.path.join(self.save_dir, "last_checkpoint")
         return os.path.exists(save_file)
+    
+    def has_non_local_pretrained(self):
+        if self.cfg.MODEL.NON_LOCAL:
+            pretrianed_path = os.path.join(self.cfg.MODEL.NON_LOCAL_PRETRAINED_WEIGHT)
+            return os.path.exists(pretrianed_path)
+        return False
 
     def get_checkpoint_file(self):
         save_file = os.path.join(self.save_dir, "last_checkpoint")
@@ -151,7 +162,7 @@ class DetectronCheckpointer(Checkpointer):
         model_cdb=None
     ):
         super(DetectronCheckpointer, self).__init__(
-            model, optimizer, scheduler, save_dir, save_to_disk, logger, model_cdb
+            cfg, model, optimizer, scheduler, save_dir, save_to_disk, logger, model_cdb
         )
         self.cfg = cfg.clone()
 

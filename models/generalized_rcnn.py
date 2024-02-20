@@ -15,6 +15,7 @@ from collections import OrderedDict
 from models.rpn.retinanet.retinanet import RetinaNetModule
 from models.rpn.rpn import RPNModule  
 from models.roi_heads.weak_head.weak_head import ROIWeakRegHead  
+from .ccam_head import CCAMHead
 
 
 class GeneralizedRCNN(nn.Module):
@@ -30,10 +31,11 @@ class GeneralizedRCNN(nn.Module):
     def __init__(self, cfg):
         super(GeneralizedRCNN, self).__init__()
 
-        body = VGG_Base(cfg)
-        model = nn.Sequential(OrderedDict([("body", body)]))
+        self.body = VGG_Base(cfg)
+        model = nn.Sequential(OrderedDict([("body", self.body)]))
         model.out_channels = 512
         self.backbone = model
+        self.cfg = cfg
 
         if cfg.MODEL.FASTER_RCNN:
             if cfg.MODEL.RETINANET_ON:
@@ -42,6 +44,8 @@ class GeneralizedRCNN(nn.Module):
                 self.rpn = RPNModule(cfg, self.backbone.out_channels)
 
         self.roi_heads = ROIWeakRegHead(cfg, self.backbone.out_channels)
+        if cfg.MODEL.CAM_ON:
+            self.ccam_head = CCAMHead(cfg, self.backbone.out_channels)
 
     def forward(self, images, targets=None, rois=None, model_cdb=None):
         """
@@ -59,6 +63,12 @@ class GeneralizedRCNN(nn.Module):
         if self.training and targets is None:
             raise ValueError("In training mode, targets should be passed")       
         features = self.backbone(images.tensors)
+        if self.cfg.MODEL.CAM_ON:
+            self.feature_map = self.body.get_cam()
+
+        if not self.training and self.cfg.MODEL.CAM_ON:
+            self.feature_map = self.body.get_cam()
+            
         if rois is not None and rois[0] is not None:
             # use pre-computed proposals
             proposals = rois
@@ -74,11 +84,18 @@ class GeneralizedRCNN(nn.Module):
             result = proposals
             detector_losses = {}
 
+        # 分兩路train
+        #TODO: 算nl ccam的loss?
+        if self.cfg.MODEL.CAM_ON:
+            nl_ccam_output = self.ccam_head(self.feature_map)
+
         if self.training:
             losses = {}
             losses.update(detector_losses)
             losses.update(proposal_losses)
             return losses, accuracy
+        elif not self.training and self.cfg.MODEL.CAM_ON:
+            return result, self.feature_map
         
         return result
 
@@ -113,3 +130,7 @@ class GeneralizedRCNN(nn.Module):
             return detector_losses, accuracy
 
         return result
+
+    
+    def get_cam(self):
+        return self.feature_map

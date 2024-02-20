@@ -229,6 +229,7 @@ def main():
         dest="use_wandb",
         help="Use weight&bias logger (Requires wandb installed)",
         action="store_true",
+        default=False,
     )
 
     args = parser.parse_args()

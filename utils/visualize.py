@@ -152,10 +152,75 @@ def overlay_class_names(image, predictions, CATEGORIES):
         )
     return image
 
+def overlay_cam(image, predictions, feature_map, weights):  
+    """
+    Adds the class activation map on top of the image
+    Arguments:
+        image (np.ndarray): an image as returned by OpenCV
+        predictions (BoxList): the result of the computation by the model.
+            It should contain the field `labels`.
+        feature_map (torch.Tensor): the feature map of the image
+        weights (torch.Tensor): the weights of the last layer
+    """
+    labels = predictions.get_field("labels")
+    print("labels:", labels)
+    nc, h, w = feature_map.shape
+    cams = []
+    for label in labels:
+        print("label:", label)
+        weight = weights[label.item()]
+        print("weight:", weight.shape)
+        print("feature_map:", feature_map.shape)
+        cam = torch.matmul(weight, feature_map.reshape((nc, h*w)))
+        cam = cam.reshape(h, w)
+        cam = cam - cam.min()
+        cam = cam / cam.max()
+        cams.append(cam.cpu().numpy()) 
+        
+    for cam in cams:    
+        cam_resized = cv2.resize(cam, (image.shape[1], image.shape[0]))
+        cam_resized = cv2.applyColorMap(np.uint8(255 * cam_resized), cv2.COLORMAP_JET)
+        image = cv2.addWeighted(image, 1, cam_resized, 0.3, 0)
+        cv2.imshow(f'CAM for label {label}', image)
+        cv2.waitKey(0)
+    
+    return image
+
+def generate_cam(feature_map, weights, class_idx):
+    """
+    Generate a class activation map for the specific class
+    Arguments:
+        feature_map (torch.Tensor): the feature map of the image
+        weights (torch.Tensor): the weights of the last layer
+        class_idx (int): the index of the class
+    Returns:
+        numpy array: Class Activation Map
+    """
+    # nc, h, w = feature_map.size(0), feature_map.size(1), feature_map.size(2)
+    # # 将 feature_map 转换为 [channels, height*width]
+    # feature_map = feature_map.view(nc, h*w)
+    # print("feature_map:", feature_map.shape)
+    cams = []
+    class_weights = weights[class_idx]
+    print("class_weights:", class_weights.shape)
+    print("feature_map:", feature_map.shape)
+    cam = torch.matmul(class_weights, feature_map.reshape((feature_map.shape[0], -1)))
+    cam = cam.reshape(feature_map.shape[1], feature_map.shape[2])  # 调整形状为 [1, height, width]
+    cam = cam - cam.min()
+    cam = cam / cam.max()
+    cams.append(cam.cpu().numpy())
+    # cam = weights[class_idx].dot(feature_map.reshape((nc, h*w)))
+    # cam = cam.reshape(h, w)
+    # cam = cam - np.min(cam)
+    # cam = cam / np.max(cam)
+    return cams
+
 def vis_results(
         predictions, 
         img_infos,
         data_path,
+        feature_maps, 
+        class_weights,
         show_mask_heatmaps=False,
         masks_per_dim=2,
         min_image_size=224
@@ -163,7 +228,7 @@ def vis_results(
     confidence_threshold = cfg.TEST.VIS_THRES
     mask_threshold = -1 if show_mask_heatmaps else 0.5
     masker = Masker(threshold=mask_threshold, padding=1)
-    for prediction, img_info in zip(predictions, img_infos):
+    for prediction, img_info, feature_map in zip(predictions, img_infos, feature_maps):
         img_name = img_info['file_name']
         # print(img_name)
         image = cv2.imread(os.path.join(data_path, img_name))
@@ -180,7 +245,6 @@ def vis_results(
             
         # select only prediction which have a `score` > confidence_threshold
         scores = prediction.get_field("scores")
-        # print("scores: ", scores)
         keep = torch.nonzero(scores > confidence_threshold, as_tuple=False).squeeze(1)
         prediction = prediction[keep]
         # prediction in descending order of score
@@ -197,6 +261,8 @@ def vis_results(
                 result = overlay_mask(result, prediction)
             if cfg.MODEL.KEYPOINT_ON:
                 result = overlay_keypoints(result, prediction)
+            if cfg.MODEL.CAM_ON:
+                result = overlay_cam(result, prediction, feature_map, class_weights)
             # name
             if 'coco' in data_path:
                 CATEGORIES = COCO_CATEGORIES
